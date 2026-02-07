@@ -1,6 +1,8 @@
 import crypto from "crypto";
 import User from "../model/UserSchema.model.js"
 import { sendEmail } from "../services/email.services.js"
+import dotenv from 'dotenv'
+dotenv.config()
 
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
@@ -20,8 +22,9 @@ export const forgotPassword = async (req, res) => {
 
         await user.save();
 
-        const resetUrl = `http://localhost:${process.env.PORT}/reset-password/${resetToken}`;
-
+        const resetUrl = `${process.env.BASE_URL}/api/auth/reset-password/${resetToken}`;
+         
+         console.log("reseturl : ",resetUrl)
         await sendEmail({
   to: user.email,
   subject: "Reset Password",

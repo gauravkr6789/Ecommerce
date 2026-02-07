@@ -11,7 +11,7 @@ import productRouter from './router/productRouter.js'
 
 
 
-console.log("PORT :",process.env.BASE_URL)
+console.log("PORT :",process.env.PORT)
 const app=express()
 
 const __filename = fileURLToPath(import.meta.url)
@@ -33,6 +33,6 @@ app.use('/api/products',productRouter)
 //database connection
 
 connectDb()
-app.listen(process.env.BASE_URL,()=>{
-    console.log(`server running on port :${process.env.BASE_URL}`)
+app.listen(process.env.PORT,()=>{
+    console.log(`server running on port :${process.env.PORT}`)
 })
