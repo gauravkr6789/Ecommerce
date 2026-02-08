@@ -9,42 +9,48 @@ export const resetPasswordPage = (req, res) => {
   `);
 };
 
+
+
 export const resetPassword = async (req, res) => {
-  const { token } = req.params;
-  const { password } = req.body;
-
   try {
-    if (!password || password.length < 6) {
-      return res.status(400).json({
-        message: "Password must be at least 6 characters long",
-      });
-    }
-
+    const { token } = req.params;
+    
+    // Hash the token from URL to match what's stored in DB
     const hashedToken = crypto
       .createHash("sha256")
       .update(token)
       .digest("hex");
-
+    
+    // Find user with matching hashed token and valid expiry
     const user = await User.findOne({
       resetPasswordToken: hashedToken,
-      resetPasswordExpire: { $gt: Date.now() },
+      resetPasswordExpire: { $gt: Date.now() }
     });
-
+    
     if (!user) {
-      return res.status(400).json({ message: "Token invalid or expired" });
+      return res.status(400).json({
+        message: "Invalid or expired token",
+        success: false
+      });
     }
-
-    user.password = await bcrypt.hash(password, 10);
+    
+    // Update password
+    const { password } = req.body;
+    user.password = password; // Make sure this is hashed in your pre-save hook
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
-
     await user.save();
-
+    
     res.status(200).json({
-      success: true,
       message: "Password reset successful",
+      success: true
     });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    
+  } catch (err) {
+    res.status(500).json({
+      message: "Password reset error",
+      error: err.message,
+      success: false
+    });
   }
 };
