@@ -26,7 +26,7 @@ export const forgotPassword = async (req, res) => {
 
     await user.save({ validateBeforeSave: false });
 
-    const BASE_URI = process.env.BASE_URL || "http://localhost:5000";
+    const BASE_URI = process.env.BASE_URL || "http://localhost:3500";
     const resetUrl = `${BASE_URI}/api/auth/reset-password/${resetToken}`;
 
     const message = `
@@ -37,15 +37,21 @@ export const forgotPassword = async (req, res) => {
     `;
 
     try {
-      await sendEmail({
-        email: user.email,
+      const result = await sendEmail({
+        to: user.email,
         subject: "Password Reset Link",
-        message
+        html: message
       });
+
+      if (!result.success) {
+        throw new Error(result.message || "Email send failed");
+      }
 
       res.status(200).json({
         message: "Reset link sent successfully",
-        success: true
+        success: true,
+        resetUrl
+
       });
 
     } catch (emailErr) {
