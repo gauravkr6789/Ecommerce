@@ -8,6 +8,9 @@ import { fileURLToPath } from 'url'
 import connectDb from './Database/dbConfig.js'
 import authRouter from './router/userrouter.js'
 import productRouter from './router/productRouter.js'
+import cartRouter from './router/cartRouter.js';
+import orderRouter from './router/orderRouter.js';
+import paymentRouter from './router/paymentRouter.js';
 
 
 
@@ -30,6 +33,9 @@ console.log(__dirname)
 //router
 app.use('/api/auth',authRouter)
 app.use('/api/products',productRouter)
+app.use('/api/carts',cartRouter)
+app.use('/api/orders',orderRouter)
+app.use('/api/payment',paymentRouter)
 //database connection
 
 connectDb()

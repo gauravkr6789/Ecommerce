@@ -1,4 +1,4 @@
-import Order from "../models/order.model.js";
+import Order from "../model/orderschema.model.js";
 import mongoose from "mongoose";
 
 // 🔹 Create Order
@@ -125,7 +125,6 @@ export const getOrderById = async (req, res) => {
   }
 };
 
-// 🔹 Update Order (user can update only if needed)
 export const updateOrder = async (req, res) => {
   try {
     const { id } = req.params;

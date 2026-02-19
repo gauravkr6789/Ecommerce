@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+
 import User from '../model/UserSchema.model.js';
 import crypto from 'crypto'
 
