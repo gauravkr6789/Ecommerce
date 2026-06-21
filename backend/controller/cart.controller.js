@@ -106,9 +106,7 @@ export const getUserCart = async (req, res) => {
   }
 };
 
-/* =========================
-   UPDATE CART ITEM
-========================= */
+
 export const updateCart = async (req, res) => {
   try {
     const { productId, quantity } = req.body;

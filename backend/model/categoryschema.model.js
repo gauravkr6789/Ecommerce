@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 
-const categorySchema = new mongoose.Schema(
+const categoryschema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -15,7 +15,7 @@ const categorySchema = new mongoose.Schema(
       unique: true,
       lowercase: true
     },
-    parentCategory: {
+    parent: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
       default: null
@@ -28,4 +28,11 @@ const categorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Category", categorySchema);
+categoryschema.pre("save", async function () {
+    if (!this.slug) {
+        this.slug =
+            this.name.toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-" + Date.now();
+    }
+});
+
+export default mongoose.model("Category", categoryschema);

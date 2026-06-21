@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -28,7 +27,7 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["user", "admin"],
+   enum: ["user", "admin", "delivery"],
     default: "user",
   },
   isActive: {
@@ -36,7 +35,15 @@ const UserSchema = new mongoose.Schema({
     default: true,
   },
   resetPasswordToken: String,
-  resetPasswordExpire: Date
+  resetPasswordExpire: Date,
+  googleId:{
+    type:String
+  },
+  avatar: {
+      type: String,
+      default: "",
+    },
+
 }, { timestamps: true });
 
 

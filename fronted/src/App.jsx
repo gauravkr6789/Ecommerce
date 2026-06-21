@@ -1,35 +1,109 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
+import Home from "./pages/Home.jsx";
+import GoogleCallback from "./pages/GoogleCallback.jsx";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import Cart from "./pages/Cart.jsx";
+import ProtectedRoute from "./routes/ProtectedRoute.jsx";
+import PublicRoute from "./routes/PublicRoute.jsx";
+import AdminRoute from "./routes/AdminRoute.jsx";
+import ProductDetail from "./pages/ProductDetail.jsx";
+import { useAuth } from "./context/AuthContext.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const {user}=useAuth()
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+
+      {/* Public Routes */}
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/register"
+        element={
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        }
+      />
+
+      <Route
+        path="/forgot-password"
+        element={<ForgotPassword />}
+      />
+
+      <Route
+        path="/reset-password/:token"
+        element={<ResetPassword />}
+      />
+
+      {/* Google Auth */}
+      <Route
+        path="/auth/google/callback"
+        element={<GoogleCallback />}
+      />
+
+      {/* Protected Home Route */}
+      <Route
+        path="/home"
+        element={
+          
+            <Home />
+          
+        }
+      />
+
+      {/* Admin Route */}
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <h1 className="text-white text-3xl">
+              Admin Dashboard
+            </h1>
+          </AdminRoute>
+        }
+      />
+
+      {/* Default Routes */}
+      <Route
+        path="/"
+        element={<Navigate to="/home" replace />}
+      />
+
+      <Route
+        path="*"
+        element={<Navigate to="/home" replace />}
+      />
+
+     <Route
+  path="/product/:id"
+  element={<ProductDetail />}
+/>
+<Route
+        path="/cart"
+        element={
+          user ? (
+            <Cart />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+
+    </Routes>
+  );
 }
 
-export default App
+export default App;

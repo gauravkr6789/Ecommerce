@@ -1,7 +1,7 @@
 import express from 'express'
 
 import { AddToCart,getUserCart,updateCart,removeCart,clearCart } from '../controller/cart.controller.js'
-import isAuthenticated from '../utils/Token/authTokenMiddleware.js'
+import isAuthenticated from '../middleware/authmiddleware.js'
 const cartRouter=express.Router()
 
 cartRouter.post('/add-cart',isAuthenticated,AddToCart)
