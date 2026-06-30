@@ -13,7 +13,10 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
+         console.log("GOOGLE PROFILE FULL =>", profile);
         const email = profile.emails[0].value;
+        console.log("EMAIL =>", email);
+    console.log("PHOTO =>", profile.photos);
 
         let user = await User.findOne({
           $or: [{ email }, { googleId: profile.id }],

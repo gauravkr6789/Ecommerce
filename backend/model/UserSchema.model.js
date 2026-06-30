@@ -19,7 +19,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     //select: false
-   
+
+  },
+  confirmPassword: {
+    type: String,
+    required: true
   },
   isVerified: {
     type: Boolean,
@@ -27,7 +31,7 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-   enum: ["user", "admin", "delivery"],
+    enum: ["user", "admin", "delivery"],
     default: "user",
   },
   isActive: {
@@ -36,13 +40,13 @@ const UserSchema = new mongoose.Schema({
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
-  googleId:{
-    type:String
+  googleId: {
+    type: String
   },
   avatar: {
-      type: String,
-      default: "",
-    },
+    type: String,
+    default: "",
+  },
 
 }, { timestamps: true });
 

@@ -7,9 +7,9 @@ import { sendEmail } from "../services/email.services.js"
 
 export const registerUser = async (req, res) => {
   try {
-    const { username, email, phone, password,role } = req.body;
+    const { username, email, phone, password,role,confirmPassword} = req.body;
 
-    if (!username || !email ||!password || !role) {
+    if (!username || !email ||!password || !role || !phone ) {
       return res.status(400).json({
         success: false,
         statusCode: 400,
@@ -38,7 +38,8 @@ export const registerUser = async (req, res) => {
       email: email.trim(),
       phone: phone.trim(),
       password: hashedPassword,
-      role:role.trim()
+      role:role.trim(),
+      confirmPassword:confirmPassword.trim()
     });
 
     const token = generateToken(user);
@@ -226,7 +227,8 @@ export const forgotPassword = async (req, res) => {
       statusCode: 200,
       message: "Reset link sent to your email. Click it to reset password.",
       data: null,
-      error: null
+      error: null,
+      resetUrl
     });
 
   } catch (error) {

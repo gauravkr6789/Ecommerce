@@ -1,9 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
 
-import "./index.css";
-
+import "./styles/globals.css";
 import { BrowserRouter } from "react-router-dom";
 
 import {
@@ -12,11 +10,14 @@ import {
 } from "@tanstack/react-query";
 
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
-import { AuthProvider } from "./context/AuthContext.jsx";
-import { ProductProvider } from "./context/ProductContext.jsx";
-import { CartProvider } from "./context/CartContext.jsx";
+import App from "./App";
+
+import { AuthProvider } from "./context/AuthContext";
+
+import "./styles/globals.css";
+
+import "react-toastify/dist/ReactToastify.css";
 
 const queryClient = new QueryClient();
 
@@ -24,21 +25,19 @@ ReactDOM.createRoot(
   document.getElementById("root")
 ).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider
+      client={queryClient}
+    >
+      <BrowserRouter>
         <AuthProvider>
-          <ProductProvider>
-            <CartProvider>
-              <App />
+          <App />
 
-              <ToastContainer
-                position="top-right"
-                autoClose={2000}
-              />
-            </CartProvider>
-          </ProductProvider>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+          />
         </AuthProvider>
-      </QueryClientProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </QueryClientProvider>
   </React.StrictMode>
 );

@@ -1,6 +1,6 @@
-import React, { createContext, useContext } from "react";
+import { createContext, useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axiosinstance from "../services/Axios.jsx";
+import axiosInstance from "../services/Axios";
 import { toast } from "react-toastify";
 
 const AuthContext = createContext();
@@ -8,127 +8,87 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const queryClient = useQueryClient();
 
-  const { data: user, isLoading } = useQuery({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const res = await axiosinstance.get("/auth/me");
+  // USER
+  const { data: user } = useQuery({
+  queryKey: ["user"],
+  queryFn: async () => {
+    const res = await axiosInstance.get("/auth/me");
+    console.log("AUTH ME RESPONSE =>", res.data);
+    return res.data.data.user;
+  },
+  enabled: !!localStorage.getItem("token"),
+});
+
+  // LOGIN
+  const loginMutation = useMutation({
+    mutationFn: async (data) => {
+      const res = await axiosInstance.post("/auth/login", data);
+
+      localStorage.setItem("token", res.data.data.token);
+
       return res.data.data.user;
     },
-    enabled: !!localStorage.getItem("token"),
-  });
-
- 
-  const loginMutation = useMutation({
-    mutationFn: async (formData) => {
-      const res = await axiosinstance.post("/auth/login", formData);
-      const { user, token } = res.data.data;
-
-      localStorage.setItem("token", token);
-      return user;
-    },
     onSuccess: (user) => {
-      toast.success("Login successful 🎉");
       queryClient.setQueryData(["user"], user);
-
-       if (user.role === "admin") {
-      window.location.href = "/admin-dashboard";
-    } else if (user.role === "delivery") {
-      window.location.href = "/delivery-dashboard";
-    } else {
-      window.location.href = "/user-dashboard";
-    }
-  },
-    
-    onError:(err) => {
-      toast.error(err.response?.data?.message || "Login failed");
+      toast.success("Login Success");
     },
   });
 
-  
+  // REGISTER
   const registerMutation = useMutation({
-    mutationFn: async (formData) => {
-      const res = await axiosinstance.post("/auth/register", formData);
-      return res.data;
+    mutationFn: async (data) => {
+      return await axiosInstance.post("/auth/register", data);
     },
-    onSuccess: () => {
-      toast.success("Account created successfully 🚀");
-    },
-    onError: (err) => {
-      toast.error(err.response?.data?.message || "Register failed");
-    },
+    onSuccess: () => toast.success("Account Created"),
   });
 
- 
-  const googleLoginMutation = useMutation({
-    mutationFn: async ({ token, user }) => {
-      localStorage.setItem("token", token);
-      return user;
-    },
-    onSuccess: (user) => {
-      toast.success("Google login successful 🎉");
-      queryClient.setQueryData(["user"], user);
-    },
-  });
-
-
-  const forgotPasswordMutation = useMutation({
+  // FORGOT
+  const forgotMutation = useMutation({
     mutationFn: async (email) => {
-      const res = await axiosinstance.post("/auth/forget-password", { email });
-      return res.data;
-    },
-    onSuccess: () => {
-      toast.success("Reset link sent 📧");
-    },
-    onError: () => {
-      toast.error("Failed to send email");
-    },
-  });
-
-  
-  const resetPasswordMutation = useMutation({
-    mutationFn: async ({ token, password }) => {
-      const res = await axiosinstance.post(`/auth/reset-password/${token}`, {
-        password,
+      return await axiosInstance.post("/auth/forgot-password", {
+        email,
       });
-      return res.data;
-    },
-    onSuccess: () => {
-      toast.success("Password reset successful 🔑");
-    },
-    onError: () => {
-      toast.error("Reset failed");
     },
   });
 
-  // ✅ LOGOUT
-  const logoutMutation = useMutation({
-    mutationFn: async () => {
-      localStorage.removeItem("token");
-    },
-    onSuccess: () => {
-      toast.success("Logged out");
-      queryClient.clear();
+  // RESET
+  const resetMutation = useMutation({
+    mutationFn: async ({ token, password }) => {
+      return await axiosInstance.post(
+        `/auth/reset-password/${token}`,
+        { password }
+      );
     },
   });
+
+  // GOOGLE CALLBACK HANDLER
+  const googleLogin = ({ token, user }) => {
+    localStorage.setItem("token", token);
+    queryClient.setQueryData(["user"], user);
+  };
+
+  // LOGOUT
+  const logout = () => {
+    localStorage.removeItem("token");
+    queryClient.clear();
+    window.location.href = "/login";
+  };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        isLoading,
-        role: user?.role,
         loginMutation,
         registerMutation,
-        googleLoginMutation,
-        forgotPasswordMutation,
-        resetPasswordMutation,
-        logoutMutation,
+        forgotMutation,
+        resetMutation,
+        googleLogin,
+        logout,
       }}
     >
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
 
-
-export const useAuth = () => useContext(AuthContext);
+export default AuthContext

@@ -19,12 +19,13 @@ import Adminrouter from "./router/adminRouter.js";
 import Reviewrouter from "./router/reviewRouter.js";
 import wishlistrouter from "./router/wishlist.router.js";
 import Addressrouter from "./router/address.router.js";
-import deliveryrouter from "./router/delivery.router.js";
+
 
 
 
 console.log("PORT :", process.env.PORT);
-console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID); // check if loaded
+console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
+console.log("GOOGLE_CLIEN_Secret:", process.env.GOOGLE_CLIENT_SECRET); // check if loaded
 
 const app = express();
 
@@ -38,7 +39,7 @@ app.use(cors({
 
 app.use(
   "/api/webhook",
-  webhookRoutes
+  webhookRouter
 );
 
 app.use(express.json());
@@ -70,7 +71,7 @@ app.use('/api/admin',Adminrouter)
 app.use('/api/review',Reviewrouter)
 app.use('/api/wishlist',wishlistrouter)
 app.use('/api/address',Addressrouter)
-app.use('api/delivery',deliveryrouter)
+
 
 connectDb();
 

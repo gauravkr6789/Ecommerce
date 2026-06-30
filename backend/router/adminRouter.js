@@ -12,7 +12,7 @@ import {
   updateOrderStatus,
   getAllProductsAdmin,
   getMonthlySales,
-  getTopProducts,
+  getTopProducts,assignDeliveryPartner
 } from "../controller/admin.controller.js";
 
 
@@ -21,7 +21,7 @@ const Adminrouter =
   express.Router();
 
 Adminrouter.use(
-  protect,
+  isAuthenticated,
   isAdmin
 );
 

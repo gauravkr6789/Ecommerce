@@ -57,6 +57,8 @@ authRouter.get(
   (req, res) => {
     const { user, token } = req.user;
 
+    
+
     res.redirect(
       `http://localhost:5173/auth/google/callback?token=${token}&username=${encodeURIComponent(
         user.username

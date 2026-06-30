@@ -1,7 +1,7 @@
 import express from 'express'
 import { createCoupon,applyCoupon,getAllCoupons,deleteCoupon } from '../controller/coupon.controller.js'
 
-const couponRouter=express.json()
+const couponRouter=express.Router()
 
 couponRouter.post(
  "/create",

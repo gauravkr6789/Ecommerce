@@ -68,9 +68,7 @@ export const createOrder = async (req, res) => {
 };
 
 
-// ✅ Verify Payment
-import crypto from "crypto";
-import Order from "../models/order.model.js";
+
 
 export const verifyPayment = async (
   req,

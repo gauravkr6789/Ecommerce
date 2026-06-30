@@ -5,7 +5,7 @@ import {
   getWishlist,
   removeFromWishlist,
   clearWishlist,
-} from "../controllers/wishlist.controller.js";
+} from "../controller/wishlist.controller.js";
 
 import isAuthenticated from "../middleware/authmiddleware.js";
 
@@ -14,25 +14,25 @@ const wishlistrouter =
 
 wishlistrouter.post(
   "/add",
-  protect,
+  isAuthenticated,
   addToWishlist
 );
 
 wishlistrouter.get(
   "/",
-  protect,
+  isAuthenticated,
   getWishlist
 );
 
 wishlistrouter.delete(
   "/remove/:productId",
-  protect,
+  isAuthenticated,
   removeFromWishlist
 );
 
 wishlistrouter.delete(
   "/clear",
-  protect,
+  isAuthenticated,
   clearWishlist
 );
 
