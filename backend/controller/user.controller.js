@@ -193,7 +193,7 @@ export const forgotPassword = async (req, res) => {
     await user.save({ validateBeforeSave: false });
 
     // 🔗 Direct link to frontend reset page
-    const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+    const resetUrl = `${process.env.VITE_API_URL}/reset-password/${resetToken}`;
 
     const html = `
       <h3>Password Reset Request</h3>
