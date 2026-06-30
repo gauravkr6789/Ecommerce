@@ -78,9 +78,18 @@ app.use('/api/wishlist',wishlistrouter)
 app.use('/api/address',Addressrouter)
 
 
-connectDb();
+const startServer = async () => {
+  try {
+    await connectDb();
 
-const PORT = process.env.PORT || 3500;
-app.listen(PORT, () => {
-    console.log(`Server running on port: ${PORT}`);
-});
+    const PORT = process.env.PORT || 3500;
+    app.listen(PORT, () => {
+      console.log(`Server running on port: ${PORT}`);
+    });
+
+  } catch (err) {
+    console.log("Server failed to start:", err.message);
+  }
+};
+
+startServer();
