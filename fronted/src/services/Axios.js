@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "https://ecommerce-zdg5.onrender.com/api/auth/login",
   withCredentials: true,
 });
 
