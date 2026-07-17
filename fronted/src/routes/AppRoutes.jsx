@@ -1,17 +1,18 @@
 import { Routes, Route } from "react-router-dom";
 
-import Home from "../pages/Home";
+import Home from "../pages/Home.jsx"
+import ProductDetail from "../pages/ProductDetails.jsx"
 
-import Login from "../pages/auth/Login";
-import Register from "../pages/auth/Register";
-import ForgotPassword from "../pages/auth/ForgotPassword";
-import ResetPassword from "../pages/auth/ResetPassword";
-import GoogleCallback from "../pages/auth/GoogleCallback";
+import Login from "../pages/auth/Login.jsx";
+import Register from "../pages/auth/Register.jsx";
+import ForgotPassword from "../pages/auth/ForgotPassword.jsx";
+import ResetPassword from "../pages/auth/ResetPassword.jsx";
+import GoogleCallback from "../pages/auth/GoogleCallback.jsx";
 
-import ProtectedRoute from "./ProtectedRoute";
-import AdminRoute from "./AdminRoute";
+import ProtectedRoute from "./ProtectedRoute.jsx";
+import AdminRoute from "./AdminRoute.jsx";
 
-import MainLayout from "../layouts/MainLayout";
+import MainLayout from "../layouts/MainLayout.jsx";
 
 const AppRoutes = () => {
   return (
@@ -80,6 +81,8 @@ const AppRoutes = () => {
           </AdminRoute>
         }
       />
+
+      <Route path="/product/:id" element={<ProductDetail />} />
     </Routes>
   );
 };

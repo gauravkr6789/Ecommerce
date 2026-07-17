@@ -81,62 +81,137 @@ export const addProduct = async (req, res) => {
 
 export const getAllProduct = async (req, res) => {
   try {
-
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 12;
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit = Math.max(parseInt(req.query.limit) || 12, 1);
     const skip = (page - 1) * limit;
 
-    const search = req.query.search || "";
-    const category = req.query.category || "";
-    const minPrice = Number(req.query.minPrice) || 0;
-    const maxPrice = Number(req.query.maxPrice) || 0;
-    const sort = req.query.sort || "newest";
-    const inStockOnly = req.query.inStock === "true";
+    const {
+      search = "",
+      category = "",
+      minPrice,
+      maxPrice,
+      sort = "newest",
+      inStock,
+    } = req.query;
 
     let filter = {
-      isActive: true
+      isActive: true,
     };
 
-    if (search) {
-      filter.name = { $regex: search, $options: "i" };
+    // ===== Search =====
+    if (search.trim()) {
+      filter.$or = [
+        {
+          name: {
+            $regex: search.trim(),
+            $options: "i",
+          },
+        },
+        {
+          brand: {
+            $regex: search.trim(),
+            $options: "i",
+          },
+        },
+        {
+          description: {
+            $regex: search.trim(),
+            $options: "i",
+          },
+        },
+      ];
     }
 
+    // ===== Category =====
     if (category) {
-      filter.category = category;
+      let categoryDoc = null;
+
+      // Try by ObjectId
+      if (category.match(/^[0-9a-fA-F]{24}$/)) {
+        categoryDoc = await Category.findById(category);
+      }
+
+      // Try by slug
+      if (!categoryDoc) {
+        categoryDoc = await Category.findOne({
+          slug: category,
+        });
+      }
+
+      // Try by name
+      if (!categoryDoc) {
+        categoryDoc = await Category.findOne({
+          name: {
+            $regex: `^${category}$`,
+            $options: "i",
+          },
+        });
+      }
+
+      if (categoryDoc) {
+        filter.category = categoryDoc._id;
+      }
     }
 
-    if (minPrice && maxPrice) {
-      filter.price = { $gte: minPrice, $lte: maxPrice };
-    } else if (minPrice) {
-      filter.price = { $gte: minPrice };
-    } else if (maxPrice) {
-      filter.price = { $lte: maxPrice };
+    // ===== Price Filter =====
+    if (minPrice || maxPrice) {
+      filter.price = {};
+
+      if (minPrice) {
+        filter.price.$gte = Number(minPrice);
+      }
+
+      if (maxPrice) {
+        filter.price.$lte = Number(maxPrice);
+      }
     }
 
-    if (inStockOnly) {
-      filter.stock = { $gt: 0 };
+    // ===== Stock =====
+    if (inStock === "true") {
+      filter.stock = {
+        $gt: 0,
+      };
     }
 
-    const sortMap = {
-      price_asc: { price: 1 },
-      price_desc: { price: -1 },
-      rating: { rating: -1 },
-      newest: { createdAt: -1 }
+    // ===== Sorting =====
+    const sortOptions = {
+      newest: {
+        createdAt: -1,
+      },
+      oldest: {
+        createdAt: 1,
+      },
+      price_asc: {
+        price: 1,
+      },
+      price_desc: {
+        price: -1,
+      },
+      rating: {
+        rating: -1,
+      },
+      stock: {
+        stock: -1,
+      },
+      name_asc: {
+        name: 1,
+      },
+      name_desc: {
+        name: -1,
+      },
     };
-
-    const sortOption = sortMap[sort] || { createdAt: -1 };
 
     const products = await Product.find(filter)
       .populate("category", "name slug")
-      .sort(sortOption)
+      .sort(sortOptions[sort] || sortOptions.newest)
       .skip(skip)
       .limit(limit);
 
     const totalProducts = await Product.countDocuments(filter);
 
     return res.status(200).json({
-      message: "Products fetched successfully",
       success: true,
+      message: "Products fetched successfully",
       statusCode: 200,
       data: {
         products,
@@ -145,24 +220,22 @@ export const getAllProduct = async (req, res) => {
           totalPages: Math.ceil(totalProducts / limit),
           totalProducts,
           hasNextPage: page < Math.ceil(totalProducts / limit),
-          hasPrevPage: page > 1
-        }
-      }
+          hasPrevPage: page > 1,
+        },
+      },
     });
-
   } catch (error) {
+    console.error(error);
 
     return res.status(500).json({
-      message: error.message,
       success: false,
+      message: "Failed to fetch products",
       statusCode: 500,
-      data: {}
+      data: null,
+      error: error.message,
     });
-
   }
 };
-
-
 
 
 export const getProductById = async (req, res) => {

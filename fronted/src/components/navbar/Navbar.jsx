@@ -1,25 +1,42 @@
 import UserMenu from "../ui/UserMenu";
 import { useAuth } from "../../hooks/auth/useAuth.js";
+
 const Navbar = () => {
   const { user } = useAuth();
 
   return (
-    <div className="flex justify-between items-center px-6 py-4 shadow bg-white">
+    <header className="w-full bg-white shadow-md sticky top-0 z-50">
+      <div className="flex items-center justify-between px-6 py-3">
 
-      <h1 className="text-xl font-bold text-indigo-600">
-        E-Commerce
-      </h1>
+        {/* LOGO */}
+        <h1 className="text-2xl font-extrabold text-indigo-600">
+          ShopMate
+        </h1>
 
-      <div>
-        {user ? (
-          <UserMenu />
-        ) : (
-          <button className="bg-indigo-600 text-white px-4 py-2 rounded">
-            Login
-          </button>
-        )}
+        {/* SEARCH */}
+        <div className="hidden md:flex flex-1 mx-6">
+          <input
+            placeholder="Search products..."
+            className="w-full border rounded-full px-4 py-2 focus:ring-2 focus:ring-indigo-400 outline-none"
+          />
+        </div>
+
+        {/* RIGHT */}
+        <div className="flex items-center gap-4">
+
+          <span className="text-xl cursor-pointer">🛒</span>
+
+          {user ? (
+            <UserMenu />
+          ) : (
+            <button className="bg-indigo-600 text-white px-4 py-2 rounded-full">
+              Login
+            </button>
+          )}
+        </div>
+
       </div>
-    </div>
+    </header>
   );
 };
 
