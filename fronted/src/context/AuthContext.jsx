@@ -22,11 +22,14 @@ export const AuthProvider = ({ children }) => {
   // LOGIN
   const loginMutation = useMutation({
     mutationFn: async (data) => {
-      const res = await axiosInstance.post("/auth/login", data);
+      const res=await axiosInstance.post('/auth/login',data)
+      //console.log("LOGIN RESPONSE:", res.data);
 
-      localStorage.setItem("token", res.data.data.token);
+  localStorage.setItem("token", res.data.data.token);
 
-      return res.data.data.user;
+  //console.log("TOKEN AFTER SAVE:", localStorage.getItem("token"));
+
+  return res.data.data.user;
     },
     onSuccess: (user) => {
       queryClient.setQueryData(["user"], user);

@@ -19,13 +19,15 @@ import Adminrouter from "./router/adminRouter.js";
 import Reviewrouter from "./router/reviewRouter.js";
 import wishlistrouter from "./router/wishlist.router.js";
 import Addressrouter from "./router/address.router.js";
+import { log } from "console";
 
 
 
 
 console.log("PORT :", process.env.PORT);
 console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
-console.log("GOOGLE_CLIEN_Secret:", process.env.GOOGLE_CLIENT_SECRET); // check if loaded
+console.log("GOOGLE_CLIEN_Secret:", process.env.GOOGLE_CLIENT_SECRET);
+
 
 const app = express();
 

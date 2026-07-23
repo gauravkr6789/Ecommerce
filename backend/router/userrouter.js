@@ -44,7 +44,9 @@ authRouter.get("/me", isAuthenticated, (req, res) => {
 // Google OAuth routes
 authRouter.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
 );
 
 // 🔹 Google callback

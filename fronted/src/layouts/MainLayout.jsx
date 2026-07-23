@@ -1,10 +1,17 @@
-import Navbar from "../components/navbar/Navbar";
+import { Outlet } from "react-router-dom";
+import Navbar from "../components/navbar/Navbar.jsx";
+import Footer from "../components/layout/Footer";
 
-const MainLayout = ({ children }) => {
+const MainLayout = () => {
   return (
     <>
       <Navbar />
-      <main>{children}</main>
+
+      <main className="min-h-screen">
+        <Outlet />
+      </main>
+
+      <Footer />
     </>
   );
 };

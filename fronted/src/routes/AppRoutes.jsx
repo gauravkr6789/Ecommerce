@@ -1,7 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 
-import Home from "../pages/Home.jsx"
-import ProductDetail from "../pages/ProductDetails.jsx"
+import MainLayout from "../layouts/MainLayout.jsx";
+
+import Home from "../pages/Home.jsx";
+import Products from "../pages/Products.jsx";
+import ProductDetail from "../pages/ProductDetails.jsx";
+import Categories from "../pages/admin/Categories.jsx";
+import Wishlist from "../pages/Wishlist.jsx";
+import Cart from "../pages/Cart.jsx";
+import NotFound from "../pages/NotFound.jsx";
 
 import Login from "../pages/auth/Login.jsx";
 import Register from "../pages/auth/Register.jsx";
@@ -12,28 +19,17 @@ import GoogleCallback from "../pages/auth/GoogleCallback.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminRoute from "./AdminRoute.jsx";
 
-import MainLayout from "../layouts/MainLayout.jsx";
-
 const AppRoutes = () => {
   return (
     <Routes>
 
-      {/* Public Routes */}
+      {/* ================= Public Auth Routes ================= */}
 
-      <Route
-        path="/login"
-        element={<Login />}
-      />
+      <Route path="/login" element={<Login />} />
 
-      <Route
-        path="/register"
-        element={<Register />}
-      />
+      <Route path="/register" element={<Register />} />
 
-      <Route
-        path="/forgot-password"
-        element={<ForgotPassword />}
-      />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
 
       <Route
         path="/reset-password/:token"
@@ -45,44 +41,80 @@ const AppRoutes = () => {
         element={<GoogleCallback />}
       />
 
-      {/* Protected Layout */}
+      {/* ================= Main Layout ================= */}
 
-      <Route
-        path="/"
-        element={
-          <MainLayout>
-            <Home />
-          </MainLayout>
-        }
-      />
+      <Route element={<MainLayout />}>
 
-      {/* User Dashboard */}
+        {/* Home */}
+        <Route path="/" element={<Home />} />
 
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <MainLayout>
-              <h1>Profile Page</h1>
-            </MainLayout>
-          </ProtectedRoute>
-        }
-      />
+        {/* Products */}
+        <Route path="/products" element={<Products />} />
 
-      {/* Admin Dashboard */}
+        {/* Single Product */}
+        <Route
+          path="/product/:id"
+          element={<ProductDetail />}
+        />
 
-      <Route
-        path="/admin"
-        element={
-          <AdminRoute>
-            <MainLayout>
-              <h1>Admin Dashboard</h1>
-            </MainLayout>
-          </AdminRoute>
-        }
-      />
+        {/* Categories */}
+        <Route
+          path="/categories"
+          element={<Categories />}
+        />
 
-      <Route path="/product/:id" element={<ProductDetail />} />
+        {/* Wishlist */}
+        <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoute>
+              <Wishlist />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Cart */}
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Profile */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <h1 className="text-3xl font-bold">
+                Profile Page
+              </h1>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin */}
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <h1 className="text-3xl font-bold">
+                Admin Dashboard
+              </h1>
+            </AdminRoute>
+          }
+        />
+
+        {/* 404 */}
+        <Route
+          path="*"
+          element={<NotFound />}
+        />
+
+      </Route>
+
     </Routes>
   );
 };

@@ -39,7 +39,7 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     window.location.href =
-      "http://localhost:3500/api/auth/google";
+      "https://ecommerce-zdg5.onrender.com/api/auth/google";
   };
 
   return (
