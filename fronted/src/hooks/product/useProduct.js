@@ -12,6 +12,7 @@ export const useProducts = (params = {}) => {
       queryFn: () => getAllProducts(params),
 
       staleTime: 1000 * 60 * 5,
+      //placeholderData:(Prevdata)=>prevdata
 
    });
 
