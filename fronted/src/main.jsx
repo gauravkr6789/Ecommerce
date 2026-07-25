@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 
 import "./styles/globals.css";
 import { BrowserRouter } from "react-router-dom";
+import ThemeProvider from "./context/ThemeContext";
 
 import {
   QueryClient,
@@ -25,19 +26,19 @@ ReactDOM.createRoot(
   document.getElementById("root")
 ).render(
   <React.StrictMode>
-    <QueryClientProvider
-      client={queryClient}
-    >
-      <BrowserRouter>
-        <AuthProvider>
-          <App />
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <BrowserRouter>
+          <AuthProvider>
+            <App />
 
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-          />
-        </AuthProvider>
-      </BrowserRouter>
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+            />
+          </AuthProvider>
+        </BrowserRouter>
+      </ThemeProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );
