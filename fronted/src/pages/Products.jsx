@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../components/product/ProductCard";
-import Pagination from "../components/product/Pagination";
+import Pagination from "../components/product/Pagination"
 import ProductSort from "../components/product/ProductSort";
 import ProductCategoryFilter from "../components/product/ProductCategoryFilter";
 
