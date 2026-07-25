@@ -10,11 +10,11 @@ import {
 
 import UserMenu from "../ui/UserMenu";
 import { useAuth } from "../../hooks/auth/useAuth";
-import { UseTheme } from "../../hooks/theme/useTheme";
+import { useTheme } from "../../hooks/theme/usetheme"
 
 const Navbar = () => {
   const { user } = useAuth();
-  const { theme, toggletheme } = UseTheme();
+  const { theme, toggletheme } = useTheme();
 
   const cartCount = 0;
   const wishlistCount = 0;
