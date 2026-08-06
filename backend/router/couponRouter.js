@@ -1,4 +1,4 @@
-import express from 'express'
+/*import express from 'express'
 import { createCoupon,applyCoupon,getAllCoupons,deleteCoupon } from '../controller/coupon.controller.js'
 
 const couponRouter=express.Router()
@@ -22,4 +22,4 @@ couponRouter.delete(
  deleteCoupon
 );
 
-export default couponRouter
+export default couponRouter*/

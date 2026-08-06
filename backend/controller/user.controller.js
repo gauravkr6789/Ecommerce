@@ -9,6 +9,9 @@ export const registerUser = async (req, res) => {
   try {
     const { username, email, phone, password,role,confirmPassword} = req.body;
 
+
+
+
     if (!username || !email ||!password || !role || !phone ) {
       return res.status(400).json({
         success: false,

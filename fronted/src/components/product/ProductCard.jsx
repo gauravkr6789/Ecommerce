@@ -1,8 +1,15 @@
-import { Heart, Star, ShoppingCart } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Heart, Star, ShoppingCart, User } from "lucide-react";
+import { Link } from "react-router-dom"
+import { useAddcart } from "../../hooks/cart/useCart";
+import { toast } from "react-toastify";
 
 const ProductCard = ({ product }) => {
-  
+
+  const {
+  mutateAsync: addToCart,
+  isPending,
+} = useAddcart();
+
   const {
     _id,
     name,
@@ -13,6 +20,18 @@ const ProductCard = ({ product }) => {
     reviewsCount,
     stock,
   } = product;
+
+  const handleAddtoCart = async () => {
+    await addToCart({
+      productId: _id, quantity: 1
+    })
+   
+   
+  }
+
+
+
+
 
   console.log(`${import.meta.env.VITE_API_URL}${images?.[0]?.url}`)
 
@@ -83,9 +102,8 @@ const ProductCard = ({ product }) => {
 
         {/* Stock */}
         <p
-          className={`mt-2 text-sm font-medium ${
-            stock > 0 ? "text-green-600" : "text-red-500"
-          }`}
+          className={`mt-2 text-sm font-medium ${stock > 0 ? "text-green-600" : "text-red-500"
+            }`}
         >
           {stock > 0 ? "In Stock" : "Out of Stock"}
         </p>
@@ -93,11 +111,12 @@ const ProductCard = ({ product }) => {
         {/* Buttons */}
         <div className="mt-5 flex gap-3">
           <button
+            onClick={handleAddtoCart}
             disabled={stock === 0}
             className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition disabled:bg-gray-400"
           >
             <ShoppingCart size={18} />
-            Add Cart
+            {isPending ? "Adding" : "AddToCart"}
           </button>
 
           <button

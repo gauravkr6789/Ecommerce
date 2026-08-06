@@ -14,7 +14,7 @@ import orderRouter from './router/orderRouter.js';
 import paymentRouter from './router/paymentRouter.js';
 import categoryRouter from './router/categoryRouter.js';
 import webhookRouter from "./router/webhookRouter.js";
-import couponRouter from "./router/couponRouter.js";
+//import couponRouter from "./router/couponRouter.js";
 import Adminrouter from "./router/adminRouter.js";
 import Reviewrouter from "./router/reviewRouter.js";
 import wishlistrouter from "./router/wishlist.router.js";
@@ -73,7 +73,7 @@ app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/payment', paymentRouter);
-app.use('/api/coupon',couponRouter)
+//app.use('/api/coupon',couponRouter)
 app.use('/api/admin',Adminrouter)
 app.use('/api/review',Reviewrouter)
 app.use('/api/wishlist',wishlistrouter)

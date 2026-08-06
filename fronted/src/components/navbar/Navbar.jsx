@@ -11,12 +11,17 @@ import {
 import UserMenu from "../ui/UserMenu";
 import { useAuth } from "../../hooks/auth/useAuth";
 import { useTheme } from "../../hooks/theme/usetheme"
+import { useCart } from "../../hooks/cart/useCart";
 
 const Navbar = () => {
   const { user } = useAuth();
+  const {data:carts}=useCart()
   const { theme, toggletheme } = useTheme();
 
-  const cartCount = 0;
+ const cartCount =
+  carts?.items?.reduce((count, item) => count + item.quantity, 0) || 0;
+
+console.log(cartCount);
   const wishlistCount = 0;
 
   return (
