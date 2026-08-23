@@ -1,101 +1,164 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
-{
-  user:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"User",
-    required:true
-  },
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
 
-  items:[
-    {
-      product:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Product",
-        required:true
+    items: [
+      {
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+
+        // Product name snapshot at purchase time
+        name: {
+          type: String,
+          required: true,
+        },
+
+        quantity: {
+          type: Number,
+          required: true,
+          min: 1,
+        },
+
+        // Actual price per unit at purchase time
+        price: {
+          type: Number,
+          required: true,
+          min: 0,
+        },
+
+        // price × quantity
+        subtotal: {
+          type: Number,
+          required: true,
+          min: 0,
+        },
       },
-      quantity:{
-        type:Number,
-        required:true
+    ],
+
+    // Shipping address snapshot at order time
+    shippingAddress: {
+      fullName: {
+        type: String,
+        required: true,
+        trim: true,
       },
-      price:{
-        type:Number,
-        required:true
-      }
-    }
-  ],
 
-  shippingAddress:{
-    fullName:String,
-    phone:String,
-    address:String,
-    city:String,
-    state:String,
-    pincode:String
+      phone: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+
+      address: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+
+      city: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+
+      state: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+
+      pincode: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+    },
+
+    coupon: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Coupon",
+      default: null,
+    },
+
+    // Snapshot of coupon code used in this order
+    couponCode: {
+      type: String,
+      default: null,
+      trim: true,
+    },
+
+    // Discount received from coupon
+    discount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+
+    // Total of all order items before discount
+    subtotal: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+
+    // Final amount customer has to pay
+    totalAmount: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+
+    paymentStatus: {
+      type: String,
+      enum: [
+        "pending",
+        "paid",
+        "failed",
+        "refunded",
+        "partially_refunded",
+      ],
+      default: "pending",
+    },
+
+    orderStatus: {
+      type: String,
+      enum: [
+        "pending",
+        "confirmed",
+        "processing",
+        "shipped",
+        "delivered",
+        "cancelled",
+      ],
+      default: "pending",
+    },
+
+    paidAt: {
+      type: Date,
+      default: null,
+    },
+
+    cancelledAt: {
+      type: Date,
+      default: null,
+    },
   },
-  coupon:{
- type:mongoose.Schema.Types.ObjectId,
- ref:"Coupon"
-},
-
-discount:{
- type:Number,
- default:0
-},
-
-subtotal:Number,
-
-totalAmount:Number,
-
-  
-
-  razorpayOrderId:String,
-
-  razorpayPaymentId:String,
-
-  paymentStatus:{
-    type:String,
-    enum:[
-      "pending",
-      "paid",
-      "failed",
-      "refunded"
-    ],
-    default:"pending"
-  },
-
-  deliveryPartner: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "User"
-},
-
-deliveredAt: Date,
-
-trackingNumber: {
-  type: String,
-  default: null
-},
-
-  orderStatus:{
-    type:String,
-    enum:[
-      "placed",
-      "processing",
-      "shipped",
-      "delivered",
-      "cancelled"
-    ],
-    default:"placed"
+  {
+    timestamps: true,
   }
-
-},
-
-{
- timestamps:true
-});
-
-export default mongoose.model(
- "Order",
- orderSchema
 );
+
+// User ke latest orders efficiently fetch karne ke liye
+orderSchema.index({ user: 1, createdAt: -1 });
+
+export default mongoose.model("Order", orderSchema);

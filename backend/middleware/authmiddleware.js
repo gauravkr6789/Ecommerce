@@ -15,7 +15,7 @@ const isAuthenticated = async (req, res, next) => {
     }
 
     const token = authHeader.split(" ")[1];
-    console.log("token :",token)
+    console.log("token :", token);
 
     let decoded;
     try {

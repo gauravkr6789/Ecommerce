@@ -10,34 +10,18 @@ import {
 
 import isAuthenticated from "../middleware/authmiddleware.js";
 
-const Addressrouter =
-  express.Router();
+const Addressrouter = express.Router();
 
 Addressrouter.use(isAuthenticated);
 
-Addressrouter.post(
-  "/",
-  createAddress
-);
+Addressrouter.post("/", createAddress);
 
-Addressrouter.get(
-  "/",
-  getAddresses
-);
+Addressrouter.get("/", getAddresses);
 
-Addressrouter.get(
-  "/:id",
-  getAddressById
-);
+Addressrouter.get("/:id", getAddressById);
 
-Addressrouter.put(
-  "/:id",
-  updateAddress
-);
+Addressrouter.put("/:id", updateAddress);
 
-Addressrouter.delete(
-  "/:id",
-  deleteAddress
-);
+Addressrouter.delete("/:id", deleteAddress);
 
 export default Addressrouter;

@@ -5,23 +5,36 @@ const cartSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
+      required: true,
+      unique: true,
     },
 
     items: [
       {
-        product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
-        quantity: { type: Number, default: 0 },
-        price: { type: Number }
-      }
-    ],
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
 
-    totalPrice: {
-      type: Number,
-      default: 0
-    }
+        quantity: {
+          type: Number,
+          required: true,
+          min: 1,
+        },
+
+        // Convenience/display value only.
+        // Checkout will fetch the actual Product price again.
+        price: {
+          type: Number,
+          min: 0,
+        },
+      },
+    ],
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 export default mongoose.model("Cart", cartSchema);
