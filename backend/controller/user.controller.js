@@ -186,6 +186,7 @@ export const forgotPassword = async (req, res) => {
 
     // 🔗 Direct link to frontend reset page
     const resetUrl = `${process.env.FRONTED_URL}/reset-password/${resetToken}`;
+    console.log("reseturl:", resetUrl);
 
     const html = `
       <h3>Password Reset Request</h3>
