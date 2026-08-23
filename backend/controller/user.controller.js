@@ -185,7 +185,7 @@ export const forgotPassword = async (req, res) => {
     await user.save({ validateBeforeSave: false });
 
     // 🔗 Direct link to frontend reset page
-    const resetUrl = `${process.env.FRONTED_URL}/reset-password/${resetToken}`;
+    const resetUrl = `https://ecommerce-delta-azure.vercel.app/reset-password/${resetToken}`;
     console.log("reseturl:", resetUrl);
 
     const html = `
