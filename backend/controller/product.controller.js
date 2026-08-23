@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Category from "../model/categoryschema.model.js";
+import Product from "../model/productschema.model.js";
 
 // Create product - Admin
 export const addProduct = async (req, res) => {
