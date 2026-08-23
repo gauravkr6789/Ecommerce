@@ -23,43 +23,43 @@ const Login = () => {
 
 
   const [formData, setFormData] = useState({
-    email:"",
-    password:"",
+    email: "",
+    password: "",
   });
 
 
 
-  const handleChange=(e)=>{
+  const handleChange = (e) => {
 
-    setFormData((prev)=>({
+    setFormData((prev) => ({
       ...prev,
-      [e.target.name]:e.target.value
+      [e.target.name]: e.target.value
     }));
 
   };
 
 
 
-  const handleSubmit=async(e)=>{
+  const handleSubmit = async (e) => {
 
     e.preventDefault();
 
-    try{
+    try {
 
       const user = await loginMutation.mutateAsync(formData);
 
       toast.success("Login successful");
 
 
-      if(user?.role==="admin"){
+      if (user?.role === "admin") {
         navigate("/admin");
       }
-      else{
+      else {
         navigate("/");
       }
 
     }
-    catch(error){
+    catch (error) {
 
       toast.error(
         error?.response?.data?.message ||
@@ -72,10 +72,10 @@ const Login = () => {
 
 
 
-  const handleGoogleLogin=()=>{
+  const handleGoogleLogin = () => {
 
     window.location.href =
-    `${import.meta.env.VITE_API_URL}/auth/google`;
+      `${import.meta.env.VITE_API_URL}/auth/google`;
 
   };
 
@@ -83,10 +83,10 @@ const Login = () => {
 
 
 
-return (
+  return (
 
-<div
-className="
+    <div
+      className="
 min-h-screen
 flex
 items-center
@@ -97,13 +97,13 @@ bg-gray-100
 dark:bg-gray-950
 px-4
 "
->
+    >
 
 
-{/* Background blobs */}
+      {/* Background blobs */}
 
-<div
-className="
+      <div
+        className="
 absolute
 w-72
 h-72
@@ -114,11 +114,11 @@ opacity-30
 top-10
 left-10
 "
-/>
+      />
 
 
-<div
-className="
+      <div
+        className="
 absolute
 w-80
 h-80
@@ -129,16 +129,16 @@ opacity-30
 bottom-10
 right-10
 "
-/>
+      />
 
 
 
 
 
-{/* Card */}
+      {/* Card */}
 
-<div
-className="
+      <div
+        className="
 relative
 z-10
 w-full
@@ -153,55 +153,55 @@ rounded-3xl
 shadow-2xl
 p-8
 "
->
+      >
 
 
 
-<div className="text-center mb-8">
+        <div className="text-center mb-8">
 
 
-<h1
-className="
+          <h1
+            className="
 text-4xl
 font-bold
 text-gray-900
 dark:text-white
 "
->
-Welcome Back
-</h1>
+          >
+            Welcome Back
+          </h1>
 
 
-<p
-className="
+          <p
+            className="
 mt-3
 text-gray-600
 dark:text-gray-400
 "
->
-Login to continue shopping
-</p>
+          >
+            Login to continue shopping
+          </p>
 
 
-</div>
-
-
-
-
-
-<form
-onSubmit={handleSubmit}
-className="space-y-5"
->
+        </div>
 
 
 
-{/* Email */}
 
-<div>
 
-<label
-className="
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-5"
+        >
+
+
+
+          {/* Email */}
+
+          <div>
+
+            <label
+              className="
 block
 mb-2
 text-sm
@@ -209,38 +209,38 @@ font-medium
 text-gray-700
 dark:text-gray-300
 "
->
-Email
-</label>
+            >
+              Email
+            </label>
 
 
-<div className="relative">
+            <div className="relative">
 
-<FaEnvelope
-className="
+              <FaEnvelope
+                className="
 absolute
 left-4
 top-4
 text-gray-400
 "
-/>
+              />
 
 
-<input
+              <input
 
-type="email"
+                type="email"
 
-name="email"
+                name="email"
 
-value={formData.email}
+                value={formData.email}
 
-onChange={handleChange}
+                onChange={handleChange}
 
-required
+                required
 
-placeholder="Enter your email"
+                placeholder="Enter your email"
 
-className="
+                className="
 w-full
 pl-11
 pr-4
@@ -259,27 +259,27 @@ focus:ring-indigo-500
 transition
 "
 
-/>
+              />
 
 
-</div>
+            </div>
 
-</div>
-
-
-
+          </div>
 
 
 
 
-{/* Password */}
 
 
-<div>
+
+          {/* Password */}
 
 
-<label
-className="
+          <div>
+
+
+            <label
+              className="
 block
 mb-2
 text-sm
@@ -287,46 +287,46 @@ font-medium
 text-gray-700
 dark:text-gray-300
 "
->
-Password
-</label>
+            >
+              Password
+            </label>
 
 
 
-<div className="relative">
+            <div className="relative">
 
 
-<FaLock
-className="
+              <FaLock
+                className="
 absolute
 left-4
 top-4
 text-gray-400
 "
-/>
+              />
 
 
 
-<input
+              <input
 
-type={
-showPassword
-?"text"
-:"password"
-}
+                type={
+                  showPassword
+                    ? "text"
+                    : "password"
+                }
 
-name="password"
+                name="password"
 
-value={formData.password}
+                value={formData.password}
 
-onChange={handleChange}
+                onChange={handleChange}
 
-required
+                required
 
-placeholder="Enter password"
+                placeholder="Enter password"
 
 
-className="
+                className="
 w-full
 pl-11
 pr-12
@@ -345,80 +345,80 @@ focus:ring-indigo-500
 transition
 "
 
-/>
+              />
 
 
 
-<button
+              <button
 
-type="button"
+                type="button"
 
-onClick={()=>setShowPassword(!showPassword)}
+                onClick={() => setShowPassword(!showPassword)}
 
-className="
+                className="
 absolute
 right-4
 top-4
 text-gray-500
 "
 
->
+              >
 
-{
-showPassword
-?
-<FaEyeSlash/>
-:
-<FaEye/>
-}
+                {
+                  showPassword
+                    ?
+                    <FaEyeSlash />
+                    :
+                    <FaEye />
+                }
 
-</button>
-
-
-</div>
+              </button>
 
 
-</div>
+            </div>
 
 
+          </div>
 
 
 
-{/* Forgot */}
 
-<div className="flex justify-end">
 
-<Link
+          {/* Forgot */}
 
-to="/forgot-password"
+          <div className="flex justify-end">
 
-className="
+            <Link
+
+              to="/forgot-password"
+
+              className="
 text-indigo-600
 dark:text-indigo-400
 text-sm
 hover:underline
 "
 
->
-Forgot Password?
-</Link>
+            >
+              Forgot Password?
+            </Link>
 
-</div>
-
-
+          </div>
 
 
 
 
 
-{/* Login button */}
 
 
-<button
+          {/* Login button */}
 
-disabled={loginMutation.isPending}
 
-className="
+          <button
+
+            disabled={loginMutation.isPending}
+
+            className="
 w-full
 py-3
 rounded-xl
@@ -431,86 +431,86 @@ shadow-lg
 disabled:opacity-50
 "
 
->
+          >
 
-{
-loginMutation.isPending
-?
-"Logging In..."
-:
-"Login"
-}
-
-
-</button>
+            {
+              loginMutation.isPending
+                ?
+                "Logging In..."
+                :
+                "Login"
+            }
 
 
-</form>
+          </button>
 
 
+        </form>
 
 
 
 
 
 
-{/* Divider */}
 
 
-<div
-className="
+        {/* Divider */}
+
+
+        <div
+          className="
 my-6
 flex
 items-center
 gap-3
 "
->
+        >
 
-<div
-className="
+          <div
+            className="
 flex-1
 border-t
 border-gray-300
 dark:border-gray-700
 "
-/>
+          />
 
 
-<span
-className="
+          <span
+            className="
 text-sm
 text-gray-500
 "
->
-OR
-</span>
+          >
+            OR
+          </span>
 
 
-<div
-className="
+          <div
+            className="
 flex-1
 border-t
 border-gray-300
 dark:border-gray-700
 "
-/>
+          />
 
 
-</div>
-
-
-
+        </div>
 
 
 
 
-{/* Google */}
 
-<button
 
-onClick={handleGoogleLogin}
 
-className="
+        {/* Google */}
+
+        <button
+
+          onClick={handleGoogleLogin}
+
+          className="
 w-full
 py-3
 rounded-xl
@@ -530,63 +530,63 @@ dark:hover:bg-gray-700
 transition
 "
 
->
+        >
 
 
-<FaGoogle className="text-red-500"/>
+          <FaGoogle className="text-red-500" />
 
 
-Continue with Google
+          Continue with Google
 
 
-</button>
-
-
-
+        </button>
 
 
 
-<p
-className="
+
+
+
+        <p
+          className="
 text-center
 mt-6
 text-gray-600
 dark:text-gray-400
 "
->
+        >
 
-Don't have an account?
+          Don't have an account?
 
-{" "}
+          {" "}
 
-<Link
+          <Link
 
-to="/register"
+            to="/register"
 
-className="
+            className="
 text-indigo-600
 dark:text-indigo-400
 font-semibold
 hover:underline
 "
 
->
-Register
-</Link>
+          >
+            Register
+          </Link>
 
 
-</p>
+        </p>
 
 
 
 
 
-</div>
+      </div>
 
 
-</div>
+    </div>
 
-);
+  );
 
 };
 
