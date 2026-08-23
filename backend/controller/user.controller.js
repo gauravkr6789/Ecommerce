@@ -2,23 +2,20 @@ import User from "../model/UserSchema.model.js";
 import bcrypt from "bcrypt";
 import generateToken from "../utils/Token/token.js";
 import crypto from "crypto";
-import { sendEmail } from "../services/email.services.js"
-
+import { sendEmail } from "../services/email.services.js";
 
 export const registerUser = async (req, res) => {
   try {
-    const { username, email, phone, password,role,confirmPassword} = req.body;
+    const { username, email, phone, password, role, confirmPassword } =
+      req.body;
 
-
-
-
-    if (!username || !email ||!password || !role || !phone ) {
+    if (!username || !email || !password || !role || !phone) {
       return res.status(400).json({
         success: false,
         statusCode: 400,
         message: "All fields are required",
         data: null,
-        error: "Missing required fields"
+        error: "Missing required fields",
       });
     }
 
@@ -30,7 +27,7 @@ export const registerUser = async (req, res) => {
         statusCode: 409,
         message: "User already exists",
         data: null,
-        error: "Duplicate email"
+        error: "Duplicate email",
       });
     }
 
@@ -41,8 +38,8 @@ export const registerUser = async (req, res) => {
       email: email.trim(),
       phone: phone.trim(),
       password: hashedPassword,
-      role:role.trim(),
-      confirmPassword:confirmPassword.trim()
+      role: role.trim(),
+      confirmPassword: confirmPassword.trim(),
     });
 
     const token = generateToken(user);
@@ -57,25 +54,21 @@ export const registerUser = async (req, res) => {
           id: user._id,
           username: user.username,
           email: user.email,
-          role: user.role
-        }
+          role: user.role,
+        },
       },
-      error: null
+      error: null,
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
       statusCode: 500,
       message: "Internal server error",
       data: null,
-      error: error.message
+      error: error.message,
     });
   }
 };
-
-
-
 
 export const loginUser = async (req, res) => {
   try {
@@ -87,7 +80,7 @@ export const loginUser = async (req, res) => {
         statusCode: 400,
         message: "Email and password are required",
         data: null,
-        error: "Missing credentials"
+        error: "Missing credentials",
       });
     }
 
@@ -100,8 +93,7 @@ export const loginUser = async (req, res) => {
         message: "Invalid email or password",
         data: null,
         error: "User not found",
-      
-      })
+      });
     }
 
     const isMatch = await bcrypt.compare(password.trim(), user.password);
@@ -112,7 +104,7 @@ export const loginUser = async (req, res) => {
         statusCode: 401,
         message: "Invalid email or password",
         data: null,
-        error: "Password incorrect"
+        error: "Password incorrect",
       });
     }
 
@@ -128,25 +120,21 @@ export const loginUser = async (req, res) => {
           id: user._id,
           username: user.username,
           email: user.email,
-          role: user.role
-        }
+          role: user.role,
+        },
       },
-      error: null
+      error: null,
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
       statusCode: 500,
       message: "Internal server error",
       data: null,
-      error: error.message
+      error: error.message,
     });
   }
 };
-
-
-
 
 export const logoutUser = async (req, res) => {
   return res.status(200).json({
@@ -154,11 +142,9 @@ export const logoutUser = async (req, res) => {
     statusCode: 200,
     message: "Logout successful",
     data: null,
-    error: null
+    error: null,
   });
 };
-
-
 
 export const forgotPassword = async (req, res) => {
   try {
@@ -170,7 +156,7 @@ export const forgotPassword = async (req, res) => {
         statusCode: 400,
         message: "Email is required",
         data: null,
-        error: "Missing email"
+        error: "Missing email",
       });
     }
 
@@ -183,20 +169,23 @@ export const forgotPassword = async (req, res) => {
         statusCode: 200,
         message: "If this email exists, a reset link has been sent",
         data: null,
-        error: null
+        error: null,
       });
     }
 
     // Generate token
     const resetToken = crypto.randomBytes(32).toString("hex");
 
-    user.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    user.resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
     user.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 min
 
     await user.save({ validateBeforeSave: false });
 
     // 🔗 Direct link to frontend reset page
-    const resetUrl = `${process.env.VITE_API_URL}/reset-password/${resetToken}`;
+    const resetUrl = `${process.env.FRONTED_URL}/reset-password/${resetToken}`;
 
     const html = `
       <h3>Password Reset Request</h3>
@@ -208,7 +197,7 @@ export const forgotPassword = async (req, res) => {
     const emailResponse = await sendEmail({
       to: user.email,
       subject: "Password Reset",
-      html
+      html,
     });
 
     if (!emailResponse.success) {
@@ -221,7 +210,7 @@ export const forgotPassword = async (req, res) => {
         statusCode: 500,
         message: "Failed to send reset email",
         data: null,
-        error: "Email service failed"
+        error: "Email service failed",
       });
     }
 
@@ -231,21 +220,18 @@ export const forgotPassword = async (req, res) => {
       message: "Reset link sent to your email. Click it to reset password.",
       data: null,
       error: null,
-      resetUrl
+      resetUrl,
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
       statusCode: 500,
       message: "Server error while processing request",
       data: null,
-      error: error.message
+      error: error.message,
     });
   }
 };
-
-
 
 export const resetPassword = async (req, res) => {
   try {
@@ -260,10 +246,7 @@ export const resetPassword = async (req, res) => {
     }
 
     // Hash token to match DB
-    const hashedToken = crypto
-      .createHash("sha256")
-      .update(token)
-      .digest("hex");
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     const user = await User.findOne({
       resetPasswordToken: hashedToken,
@@ -290,7 +273,6 @@ export const resetPassword = async (req, res) => {
       success: true,
       message: "Password reset successfully",
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -300,31 +282,29 @@ export const resetPassword = async (req, res) => {
   }
 };
 
-export const getAllUser=async(req,res)=>{
-  try{
-    const fetchUser=await User.find()
+export const getAllUser = async (req, res) => {
+  try {
+    const fetchUser = await User.find();
 
-    if(!fetchUser){
+    if (!fetchUser) {
       return res.status(404).json({
-        status:404,
-        message:"user not found",
-        success:false
-      })
+        status: 404,
+        message: "user not found",
+        success: false,
+      });
     }
 
     return res.status(200).json({
-         status:200,
-         message:"fetching all users.....",
-         success:true,
-         data:fetchUser
-    })
-
-  }
-  catch(err){
-       return res.status(500).json({
+      status: 200,
+      message: "fetching all users.....",
+      success: true,
+      data: fetchUser,
+    });
+  } catch (err) {
+    return res.status(500).json({
       success: false,
       message: "Server error while fetching all users",
       error: error.message,
     });
   }
-}
+};
