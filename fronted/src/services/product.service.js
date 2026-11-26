@@ -1,4 +1,4 @@
-import axiosInstance from "../services/Axios.js";
+import axiosInstance from "./Axios.js";
 
 export const getAllProducts = async (params = {}) => {
   const res = await axiosInstance.get("/products/get-all-Product", {
@@ -10,7 +10,7 @@ export const getAllProducts = async (params = {}) => {
 
 export const getProductById = async (id) => {
   const res = await axiosInstance.get(`/products/get-ProductById/${id}`);
-  return res.data;
+  return res.data.product;
 };
 
 export const createProduct = async (productData) => {

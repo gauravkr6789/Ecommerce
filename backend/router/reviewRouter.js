@@ -24,7 +24,7 @@ Reviewrouter.get(
 
 Reviewrouter.delete(
   "/:id",
-   isAuthenticated,
+  isAuthenticated,
   deleteReview
 );
 

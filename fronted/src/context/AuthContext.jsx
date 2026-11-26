@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../services/Axios";
 import { toast } from "react-toastify";
+import { connectSocket,disconnectSocket } from "../socket/socket";
 
 const AuthContext = createContext();
 
@@ -68,10 +69,12 @@ export const AuthProvider = ({ children }) => {
   const googleLogin = ({ token, user }) => {
     localStorage.setItem("token", token);
     queryClient.setQueryData(["user"], user);
+    connectSocket(token)
   };
 
   // LOGOUT
   const logout = () => {
+    disconnectSocket()
     localStorage.removeItem("token");
     queryClient.clear();
     window.location.href = "/login";

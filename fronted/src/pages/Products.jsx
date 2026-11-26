@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import ProductCard from "../components/product/ProductCard";
-import Pagination from "../components/product/Pagination"
-import ProductSort from "../components/product/ProductSort";
-import ProductCategoryFilter from "../components/product/ProductCategoryFilter";
+import ProductCard from "../components/product/ProductCard.jsx";
+import Pagination from "../components/product/Pagination.jsx"
+import ProductSort from "../components/product/ProductSort.jsx";
+import ProductCategoryFilter from "../components/product/ProductCategoryFilter.jsx";
 
-import { useProducts } from "../hooks/product/useProduct";
-import {useCategories} from "../hooks/categories/useCategories"
-import useDebounce from "../hooks/useDebounce";
+import { useProducts } from "../hooks/product/useProduct.js"
+import {useCategories} from "../hooks/categories/useCategories.js"
+import useDebounce from "../hooks/useDebounce.js";
 
 const Product = () => {
   const [page, setPage] = useState(1);

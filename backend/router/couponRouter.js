@@ -6,6 +6,7 @@ import {
   applyCoupon,
   updateCoupon,
   deleteCoupon,
+  getCouponByCode,
 } from "../controller/coupon.controller.js";
 import isAuthenticated from "../middleware/authmiddleware.js";
 import isAdmin from "../middleware/adminMiddleware.js";
@@ -20,7 +21,8 @@ couponRouter.get(
   getCouponById,
 );
 couponRouter.get("get-coupon", isAuthenticated, isAdmin, getCoupon);
-couponRouter.post("/apply", isAuthenticated, applyCoupon);
+couponRouter.get("/code/:code", isAuthenticated, getCouponByCode);
+couponRouter.post("/apply/:couponID", isAuthenticated, applyCoupon);
 couponRouter.put("/update", isAuthenticated, isAdmin, updateCoupon);
 couponRouter.delete("/delete", isAuthenticated, isAdmin, deleteCoupon);
 

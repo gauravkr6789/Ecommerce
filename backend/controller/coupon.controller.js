@@ -295,3 +295,39 @@ export const deleteCoupon = async (req, res) => {
     });
   }
 };
+
+export const getCouponByCode = async (req, res) => {
+  try {
+    const { code } = req.params;
+
+    if (!code) {
+      return res.status(400).json({
+        success: false,
+        message: "Coupon code is required",
+      });
+    }
+
+    const coupon = await Coupon.findOne({
+      code: code.trim().toUpperCase(),
+      isActive: true,
+    });
+
+    if (!coupon) {
+      return res.status(404).json({
+        success: false,
+        message: "Invalid coupon code",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Coupon found",
+      coupon,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

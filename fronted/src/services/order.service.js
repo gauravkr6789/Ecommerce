@@ -1,4 +1,4 @@
-import axiosInstance from "../services/Axios";
+import axiosInstance from "./Axios.js";
 
 export const getUserOrders = async (params = {}) => {
   const res = await axiosInstance.get("/orders/get-order", {
@@ -7,7 +7,6 @@ export const getUserOrders = async (params = {}) => {
 
   return res.data;
 };
-
 
 export const getOrderById = async (id) => {
   const res = await axiosInstance.get(`/orders/get-order/${id}`);

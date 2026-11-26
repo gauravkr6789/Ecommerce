@@ -62,7 +62,7 @@ const ResetPassword = () => {
 
       setTimeout(() => {
         navigate("/login");
-      }, 1500);
+      }, 1000);
     } catch (error) {
       toast.error(
         error?.response?.data?.message ||

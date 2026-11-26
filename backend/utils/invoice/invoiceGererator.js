@@ -1,4 +1,6 @@
 import PDFDocument from "pdfkit";
+import Order from '../../model/orderschema.model'
+
 
 export const generateInvoicePDF = (order, stream) => {
   const doc = new PDFDocument({ margin: 50 });
@@ -46,4 +48,33 @@ export const generateInvoicePDF = (order, stream) => {
   });
 
   doc.end();
+};
+
+
+
+export const downloadInvoice = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id)
+      .populate("user")
+      .populate("items.product");
+
+    if (!order) {
+      return res.status(404).json({
+        message: "Order not found",
+      });
+    }
+
+    res.setHeader("Content-Type", "application/pdf");
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="invoice-${order._id}.pdf"`
+    );
+
+    generateInvoicePDF(order, res);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };

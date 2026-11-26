@@ -90,28 +90,24 @@ const orderSchema = new mongoose.Schema(
       default: null,
     },
 
-    // Snapshot of coupon code used in this order
     couponCode: {
       type: String,
       default: null,
       trim: true,
     },
 
-    // Discount received from coupon
     discount: {
       type: Number,
       default: 0,
       min: 0,
     },
 
-    // Total of all order items before discount
     subtotal: {
       type: Number,
       required: true,
       min: 0,
     },
 
-    // Final amount customer has to pay
     totalAmount: {
       type: Number,
       required: true,
@@ -120,27 +116,37 @@ const orderSchema = new mongoose.Schema(
 
     paymentStatus: {
       type: String,
-      enum: [
-        "pending",
-        "paid",
-        "failed",
-        "refunded",
-        "partially_refunded",
-      ],
+      enum: ["pending", "paid", "failed", "refunded"],
       default: "pending",
     },
 
+    // Overall order status
     orderStatus: {
       type: String,
-      enum: [
-        "pending",
-        "confirmed",
-        "processing",
-        "shipped",
-        "delivered",
-        "cancelled",
-      ],
+      enum: ["pending", "confirmed", "cancelled", "delivered"],
       default: "pending",
+    },
+
+    // Assigned delivery partner
+    deliveryPartner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+
+    // Delivery progress
+    deliveryStatus: {
+      type: String,
+      enum: [
+        "unassigned",
+        "assigned",
+        "accepted",
+        "rejected",
+        "picked-up",
+        "out-for-delivery",
+        "delivered",
+      ],
+      default: "unassigned",
     },
 
     paidAt: {
@@ -152,13 +158,34 @@ const orderSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+
+    deliveryOTP: {
+      type: String,
+      default: null,
+    },
+    deliveryOTPExpiresAt: {
+      type: Date,
+      default: null,
+    },
+    deliveryOTPAttempts: {
+      type: Number,
+      default: 0,
+    },
+
+    deliveredAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // User ke latest orders efficiently fetch karne ke liye
 orderSchema.index({ user: 1, createdAt: -1 });
+
+// Delivery partner ke assigned orders efficiently fetch karne ke liye
+orderSchema.index({ deliveryPartner: 1, deliveryStatus: 1 });
 
 export default mongoose.model("Order", orderSchema);

@@ -11,11 +11,16 @@ export const addProduct = async (req, res) => {
       description,
       price,
       discountPrice,
-      images,
       category,
       brand,
       stock,
     } = req.body;
+
+    const uploadedFiles = Array.isArray(req.files) ? req.files : [];
+    const imageList = uploadedFiles.map((file) => ({
+      url: `/uploads/${file.filename}`,
+      public_id: file.filename,
+    }));
 
     if (!name || !description || price === undefined || !category) {
       return res.status(400).json({
@@ -25,7 +30,22 @@ export const addProduct = async (req, res) => {
       });
     }
 
-    if (price < 0 || stock < 0 || discountPrice < 0) {
+    if (!imageList.length) {
+      return res.status(400).json({
+        message: "At least one product image is required",
+        status: "fail",
+        success: false,
+      });
+    }
+
+    const parsedPrice = Number(price);
+    const parsedDiscountPrice =
+      discountPrice === undefined || discountPrice === ""
+        ? 0
+        : Number(discountPrice);
+    const parsedStock = Number(stock);
+
+    if (parsedPrice < 0 || parsedStock < 0 || parsedDiscountPrice < 0) {
       return res.status(400).json({
         message: "Price and stock cannot be negative",
         status: "fail",
@@ -33,7 +53,7 @@ export const addProduct = async (req, res) => {
       });
     }
 
-    if (discountPrice && discountPrice >= price) {
+    if (parsedDiscountPrice && parsedDiscountPrice >= parsedPrice) {
       return res.status(400).json({
         message: "Discount price must be lower than original price",
         status: "fail",
@@ -50,16 +70,24 @@ export const addProduct = async (req, res) => {
       });
     }
 
+    const normalizedSlug =
+      (slug && String(slug).trim()) ||
+      String(name)
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+
     const product = await Product.create({
       name,
-      slug,
+      slug: normalizedSlug,
       description,
-      price,
-      discountPrice: discountPrice || 0,
-      images,
+      price: parsedPrice,
+      discountPrice: parsedDiscountPrice,
+      images: imageList,
       category,
       brand,
-      stock,
+      stock: parsedStock,
       createdBy: req.user._id,
     });
 
@@ -217,7 +245,6 @@ export const updateProduct = async (req, res) => {
       "description",
       "price",
       "discountPrice",
-      "images",
       "category",
       "brand",
       "stock",
@@ -226,13 +253,21 @@ export const updateProduct = async (req, res) => {
 
     const updates = {};
 
+    // =========================
+    // Normal product fields
+    // =========================
+
     for (const field of allowedFields) {
       if (req.body[field] !== undefined) {
         updates[field] = req.body[field];
       }
     }
 
-    if (updates.price !== undefined && updates.price < 0) {
+    // =========================
+    // Validate price
+    // =========================
+
+    if (updates.price !== undefined && Number(updates.price) < 0) {
       return res.status(400).json({
         message: "Price cannot be negative",
         status: "fail",
@@ -240,13 +275,61 @@ export const updateProduct = async (req, res) => {
       });
     }
 
-    if (updates.stock !== undefined && updates.stock < 0) {
+    // =========================
+    // Validate stock
+    // =========================
+
+    if (updates.stock !== undefined && Number(updates.stock) < 0) {
       return res.status(400).json({
         message: "Stock cannot be negative",
         status: "fail",
         success: false,
       });
     }
+
+    // =========================
+    // Existing images
+    // =========================
+
+    let existingImages = [];
+
+    if (req.body.existingImages) {
+      try {
+        existingImages = JSON.parse(req.body.existingImages);
+      } catch (error) {
+        return res.status(400).json({
+          message: "Invalid existingImages format",
+          status: "fail",
+          success: false,
+        });
+      }
+    }
+
+    // =========================
+    // New uploaded images
+    // =========================
+
+    const uploadedFiles = Array.isArray(req.files) ? req.files : [];
+
+    const newImages = uploadedFiles.map((file) => ({
+      url: `/uploads/${file.filename}`,
+      public_id: file.filename,
+    }));
+
+    // =========================
+    // Final images
+    // =========================
+
+    const finalImages = [...existingImages, ...newImages];
+
+    // Only update images if image data was sent
+    if (req.body.existingImages !== undefined || uploadedFiles.length > 0) {
+      updates.images = finalImages;
+    }
+
+    // =========================
+    // Update product
+    // =========================
 
     const product = await Product.findByIdAndUpdate(id, updates, {
       new: true,
@@ -268,6 +351,8 @@ export const updateProduct = async (req, res) => {
       product,
     });
   } catch (error) {
+    console.error("UPDATE PRODUCT ERROR:", error);
+
     return res.status(500).json({
       message: error.message,
       status: "error",

@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import Hero from "../components/home/Hero.jsx";
 import ProductCard from "../components/product/ProductCard";
 import Loader from "../components/ui/Loader";

@@ -1,8 +1,7 @@
-import express from 'express'
+import express from "express";
 
-import isAuthenticated from '../middleware/authmiddleware.js'
-import isAdmin from '../middleware/adminMiddleware.js'
-
+import isAuthenticated from "../middleware/authmiddleware.js";
+import isAdmin from "../middleware/adminMiddleware.js";
 
 import {
   getDashboardStats,
@@ -12,63 +11,27 @@ import {
   updateOrderStatus,
   getAllProductsAdmin,
   getMonthlySales,
-  getTopProducts,assignDeliveryPartner
+  getTopProducts,
 } from "../controller/admin.controller.js";
 
+const Adminrouter = express.Router();
 
+Adminrouter.use(isAuthenticated, isAdmin);
 
-const Adminrouter =
-  express.Router();
+Adminrouter.get("/dashboard-stats", getDashboardStats);
 
-Adminrouter.use(
-  isAuthenticated,
-  isAdmin
-);
+Adminrouter.get("/users", getAllUsers);
 
-Adminrouter.get(
-  "/dashboard-stats",
-  getDashboardStats
-);
+Adminrouter.put("/users/:id/role", updateUserRole);
 
-Adminrouter.get(
-  "/users",
-  getAllUsers
-);
+Adminrouter.get("/orders", getAllOrders);
 
-Adminrouter.put(
-  "/users/:id/role",
-  updateUserRole
-);
+Adminrouter.put("/orders/:id/status", updateOrderStatus);
 
-Adminrouter.get(
-  "/orders",
-  getAllOrders
-);
+Adminrouter.get("/products", getAllProductsAdmin);
 
-Adminrouter.put(
-  "/orders/:id/status",
-  updateOrderStatus
-);
+Adminrouter.get("/monthly-sales", getMonthlySales);
 
-Adminrouter.get(
-  "/products",
-  getAllProductsAdmin
-);
+Adminrouter.get("/top-products", getTopProducts);
 
-Adminrouter.get(
-  "/monthly-sales",
-  getMonthlySales
-);
-
-Adminrouter.get(
-  "/top-products",
-  getTopProducts
-);
-
-Adminrouter.put(
-  "/assign-delivery",
-  assignDeliveryPartner
-);
-
-export default Adminrouter
-
+export default Adminrouter;

@@ -29,9 +29,9 @@ const paymentSchema = new mongoose.Schema(
       index: true,
     },
     razorpaySignature: {
-  type: String,
-  default: null,
-},
+      type: String,
+      default: null,
+    },
 
     amount: {
       type: Number,
@@ -52,7 +52,7 @@ const paymentSchema = new mongoose.Schema(
         "paid",
         "failed",
         "refunded",
-        "partially_refunded",
+        
       ],
       default: "created",
     },
@@ -74,7 +74,7 @@ const paymentSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export default mongoose.model("Payment", paymentSchema);

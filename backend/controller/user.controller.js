@@ -286,6 +286,7 @@ export const resetPassword = async (req, res) => {
 export const getAllUser = async (req, res) => {
   try {
     const fetchUser = await User.find();
+    const totalUsers = await User.countDocuments();
 
     if (!fetchUser) {
       return res.status(404).json({
@@ -300,6 +301,7 @@ export const getAllUser = async (req, res) => {
       message: "fetching all users.....",
       success: true,
       data: fetchUser,
+      totalUserCount: totalUsers,
     });
   } catch (err) {
     return res.status(500).json({
