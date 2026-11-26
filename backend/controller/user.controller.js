@@ -19,6 +19,47 @@ export const registerUser = async (req, res) => {
       });
     }
 
+    if (username.length < 6) {
+      return res.status(400).json({
+        message: "username too short  ",
+        success: false
+      })
+    }
+
+    if (phone.length !== 10) {
+      return res.status(400).json({
+        message: "phone length must be 10 digit ",
+        success: false
+      })
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        message: "password and confirm password are diffrent  ",
+        success: false
+      })
+    }
+
+
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s])\S{8,128}$/;
+
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must contain at least 8 characters, one uppercase, one lowercase, one number and one special character"
+      });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address"
+      });
+    }
+
     const existingUser = await User.findOne({ email: email.trim() });
 
     if (existingUser) {
@@ -31,7 +72,8 @@ export const registerUser = async (req, res) => {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password.trim(), 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedCnfPassword = await bcrypt.hash(confirmPassword, 10);
 
     const user = await User.create({
       username: username.trim(),
@@ -39,7 +81,7 @@ export const registerUser = async (req, res) => {
       phone: phone.trim(),
       password: hashedPassword,
       role: role.trim(),
-      confirmPassword: confirmPassword.trim(),
+      confirmPassword: hashedCnfPassword
     });
 
     const token = generateToken(user);
@@ -96,7 +138,7 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    const isMatch = await bcrypt.compare(password.trim(), user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return res.status(401).json({

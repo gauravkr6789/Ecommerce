@@ -13,7 +13,9 @@ export const getUserCart = async () => {
 };
 
 export const updateCart = async ({ productId, quantity }) => {
-  const response = await axios.put(`/carts/update/${productId}`, {
+  console.log("Service Quantity:", quantity);
+
+  const response = await axiosInstance.put(`/carts/update-cart/${productId}`, {
     quantity,
   });
 

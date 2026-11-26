@@ -1,3 +1,58 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+.dark .checkout-page {
+  background-color: #030712 !important;
+  color: #f9fafb;
+}
+
+.dark .checkout-page .bg-white {
+  background-color: #111827 !important;
+}
+
+.dark .checkout-page .bg-gray-50,
+.dark .checkout-page .bg-\[\#f7f7f8\] {
+  background-color: #030712 !important;
+}
+
+.dark .checkout-page .bg-gray-100 {
+  background-color: #1f2937 !important;
+}
+
+.dark .checkout-page .text-black,
+.dark .checkout-page .text-gray-900,
+.dark .checkout-page .text-gray-800,
+.dark .checkout-page .text-gray-700 {
+  color: #f3f4f6 !important;
+}
+
+.dark .checkout-page .text-gray-600,
+.dark .checkout-page .text-gray-500 {
+  color: #9ca3af !important;
+}
+
+.dark .checkout-page .border,
+.dark .checkout-page [class*="border-gray-"] {
+  border-color: #374151 !important;
+}
+
+.dark .checkout-page input:not([type="checkbox"]):not([type="radio"]),
+.dark .checkout-page textarea {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+  border-color: #374151 !important;
+}
+
+.dark .checkout-page input::placeholder,
+.dark .checkout-page textarea::placeholder {
+  color: #9ca3af;
+}
+
+.dark .checkout-page button.bg-black {
+  background-color: #4f46e5 !important;
+}
+
+.dark .checkout-page button.bg-black:hover {
+  background-color: #4338ca !important;
+}

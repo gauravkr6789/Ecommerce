@@ -1,7 +1,7 @@
 import express from 'express'
-import isAuthenticated from '../middleware/authmiddleware'
-import isAdmin from '../middleware/adminMiddleware'
-import { isDelivery } from '../middleware/delivery.middleware'
+import isAuthenticated from '../middleware/authmiddleware.js'
+import isAdmin from '../middleware/adminMiddleware.js'
+import { isDelivery } from '../middleware/delivery.middleware.js'
 
 import {
   adminDeliveryPartner,
@@ -13,7 +13,7 @@ import {
   sendDeliveryOTP,
   verifyDeliveryOTP,
   getDeliveryHistory,
-} from "../controller/delivery.controller"
+} from "../controller/delivery.controller.js"
 const deliveryRouter = express.Router();
 
 // All routes

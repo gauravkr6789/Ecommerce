@@ -1,11 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  Trash2,
-  Plus,
-  Minus,
-  ShoppingCart,
-} from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingCart } from "lucide-react";
 
 import {
   useCart,
@@ -19,11 +14,7 @@ function Cart() {
   // GET CART
   // ==========================
 
-  const {
-    data: carts,
-    isLoading,
-    isError,
-  } = useCart();
+  const { data: carts, isLoading, isError } = useCart();
 
   // ==========================
   // MUTATIONS
@@ -46,10 +37,7 @@ function Cart() {
 
       if (!imagePath) return "";
 
-      if (
-        imagePath.startsWith("http://") ||
-        imagePath.startsWith("https://")
-      ) {
+      if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
         return imagePath;
       }
 
@@ -58,10 +46,7 @@ function Cart() {
 
     // image = "/uploads/abc.jpg"
     if (typeof image === "string") {
-      if (
-        image.startsWith("http://") ||
-        image.startsWith("https://")
-      ) {
+      if (image.startsWith("http://") || image.startsWith("https://")) {
         return image;
       }
 
@@ -90,13 +75,9 @@ function Cart() {
   if (isError) {
     return (
       <div className="flex flex-col justify-center items-center h-[70vh]">
-        <h1 className="text-2xl font-bold text-red-600">
-          Failed to load cart
-        </h1>
+        <h1 className="text-2xl font-bold text-red-600">Failed to load cart</h1>
 
-        <p className="text-gray-500 mt-2">
-          Please try again later.
-        </p>
+        <p className="text-gray-500 mt-2">Please try again later.</p>
       </div>
     );
   }
@@ -108,14 +89,9 @@ function Cart() {
   if (!carts?.items?.length) {
     return (
       <div className="flex flex-col justify-center items-center h-[70vh]">
-        <ShoppingCart
-          size={70}
-          className="text-gray-400 mb-5"
-        />
+        <ShoppingCart size={70} className="text-gray-400 mb-5" />
 
-        <h1 className="text-4xl font-bold mb-3">
-          Your Cart is Empty
-        </h1>
+        <h1 className="text-4xl font-bold mb-3">Your Cart is Empty</h1>
 
         <p className="text-gray-500 mb-5">
           Looks like you haven't added anything yet.
@@ -136,11 +112,18 @@ function Cart() {
   // ==========================
 
   const handleIncrease = (item) => {
-    console.log("item:", item);
+    console.log("Mutation Triggering...");
+
+
+    const newQuantity = item.quantity + 1;
+
+    console.log("Current Quantity:", item.quantity);
+    console.log("New Quantity:", newQuantity);
+    console.log("Product ID:", item.product._id);
 
     updateCartMutation.mutate({
       productId: item.product._id,
-      quantity: item.quantity + 1,
+      quantity: newQuantity,
     });
   };
 
@@ -181,10 +164,8 @@ function Cart() {
   // ==========================
 
   const subtotal = carts.items.reduce(
-    (total, item) =>
-      total +
-      item.product.price * item.quantity,
-    0
+    (total, item) => total + item.product.price * item.quantity,
+    0,
   );
 
   // ==========================
@@ -193,18 +174,13 @@ function Cart() {
 
   return (
     <div className="bg-gray-100 min-h-screen py-10">
-
       <div className="max-w-7xl mx-auto px-5">
-
         {/* ==========================
             HEADER
         ========================== */}
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
-
-          <h1 className="text-4xl font-bold">
-            Shopping Cart
-          </h1>
+          <h1 className="text-4xl font-bold">Shopping Cart</h1>
 
           <button
             onClick={handleClearCart}
@@ -219,32 +195,24 @@ function Cart() {
           >
             <Trash2 size={18} />
 
-            {clearCartMutation.isPending
-              ? "Clearing..."
-              : "Clear Cart"}
+            {clearCartMutation.isPending ? "Clearing..." : "Clear Cart"}
           </button>
-
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-
           {/* ==========================
               CART ITEMS
           ========================== */}
 
           <div className="lg:col-span-2 space-y-5">
-
             {carts.items.map((item) => {
-
               const isUpdating =
                 updateCartMutation.isPending &&
-                updateCartMutation.variables?.productId ===
-                  item.product._id;
+                updateCartMutation.variables?.productId === item.product._id;
 
               const isRemoving =
                 removeCartMutation.isPending &&
-                removeCartMutation.variables ===
-                  item.product._id;
+                removeCartMutation.variables === item.product._id;
 
               return (
                 <div
@@ -254,15 +222,12 @@ function Cart() {
                     flex flex-col md:flex-row gap-5
                   "
                 >
-
                   {/* ==========================
                       IMAGE
                   ========================== */}
 
                   <img
-                    src={getImageUrl(
-                      item.product.images?.[0]
-                    )}
+                    src={getImageUrl(item.product.images?.[0])}
                     alt={item.product.name}
                     className="
                       w-36 h-36
@@ -280,7 +245,6 @@ function Cart() {
                   ========================== */}
 
                   <div className="flex-1">
-
                     <h2 className="text-2xl font-semibold">
                       {item.product.name}
                     </h2>
@@ -294,15 +258,9 @@ function Cart() {
                     ========================== */}
 
                     <div className="flex items-center gap-3 mt-6">
-
                       <button
-                        onClick={() =>
-                          handleDecrease(item)
-                        }
-                        disabled={
-                          isUpdating ||
-                          isRemoving
-                        }
+                        onClick={() => handleDecrease(item)}
+                        disabled={isUpdating || isRemoving}
                         className="
                           border rounded p-2
                           hover:bg-gray-100
@@ -312,23 +270,20 @@ function Cart() {
                         <Minus size={18} />
                       </button>
 
-                      <span className="
+                      <span
+                        className="
                         text-lg
                         font-semibold
                         min-w-[30px]
                         text-center
-                      ">
+                      "
+                      >
                         {item.quantity}
                       </span>
 
                       <button
-                        onClick={() =>
-                          handleIncrease(item)
-                        }
-                        disabled={
-                          isUpdating ||
-                          isRemoving
-                        }
+                        onClick={() => handleIncrease(item)}
+                        disabled={isUpdating || isRemoving}
                         className="
                           border rounded p-2
                           hover:bg-gray-100
@@ -337,7 +292,6 @@ function Cart() {
                       >
                         <Plus size={18} />
                       </button>
-
                     </div>
 
                     {/* ==========================
@@ -345,15 +299,8 @@ function Cart() {
                     ========================== */}
 
                     <button
-                      onClick={() =>
-                        handleRemove(
-                          item.product._id
-                        )
-                      }
-                      disabled={
-                        isRemoving ||
-                        isUpdating
-                      }
+                      onClick={() => handleRemove(item.product._id)}
+                      disabled={isRemoving || isUpdating}
                       className="
                         flex items-center gap-2
                         mt-6 text-red-600
@@ -363,11 +310,8 @@ function Cart() {
                     >
                       <Trash2 size={18} />
 
-                      {isRemoving
-                        ? "Removing..."
-                        : "Remove"}
+                      {isRemoving ? "Removing..." : "Remove"}
                     </button>
-
                   </div>
 
                   {/* ==========================
@@ -375,21 +319,13 @@ function Cart() {
                   ========================== */}
 
                   <div className="text-right">
-
                     <h2 className="text-2xl font-bold">
-                      ₹
-                      {(
-                        item.product.price *
-                        item.quantity
-                      ).toLocaleString()}
+                      ₹{(item.product.price * item.quantity).toLocaleString()}
                     </h2>
-
                   </div>
-
                 </div>
               );
             })}
-
           </div>
 
           {/* ==========================
@@ -397,81 +333,57 @@ function Cart() {
           ========================== */}
 
           <div>
-
-            <div className="
+            <div
+              className="
               bg-white
               rounded-xl
               shadow
               p-6
               sticky
               top-24
-            ">
-
-              <h2 className="text-2xl font-bold mb-5">
-                Order Summary
-              </h2>
+            "
+            >
+              <h2 className="text-2xl font-bold mb-5">Order Summary</h2>
 
               {/* SUBTOTAL */}
 
               <div className="flex justify-between mb-3">
+                <span>Subtotal</span>
 
-                <span>
-                  Subtotal
-                </span>
-
-                <span>
-                  ₹{subtotal.toLocaleString()}
-                </span>
-
+                <span>₹{subtotal.toLocaleString()}</span>
               </div>
 
               {/* SHIPPING */}
 
               <div className="flex justify-between mb-3">
+                <span>Shipping</span>
 
-                <span>
-                  Shipping
-                </span>
-
-                <span className="text-green-600">
-                  FREE
-                </span>
-
+                <span className="text-green-600">FREE</span>
               </div>
 
               {/* DISCOUNT */}
 
               <div className="flex justify-between mb-3">
+                <span>Discount</span>
 
-                <span>
-                  Discount
-                </span>
-
-                <span>
-                  ₹0
-                </span>
-
+                <span>₹0</span>
               </div>
 
               <hr className="my-4" />
 
               {/* TOTAL */}
 
-              <div className="
+              <div
+                className="
                 flex
                 justify-between
                 text-xl
                 font-bold
-              ">
+              "
+              >
+                <span>Total</span>
 
-                <span>
-                  Total
-                </span>
-
-                <span>
-                  ₹{subtotal.toLocaleString()}
-                </span>
-
+                <span>₹{subtotal.toLocaleString()}</span>
               </div>
 
               {/* CHECKOUT */}
@@ -510,15 +422,10 @@ function Cart() {
               >
                 Continue Shopping
               </Link>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }

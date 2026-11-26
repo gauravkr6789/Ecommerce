@@ -59,10 +59,12 @@ export const useUpdatecart = () => {
       queryClient.invalidateQueries({
         queryKey: ["cart"],
       });
+
+      toast.success("cart update successfull")
     },
 
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to update cart");
+      toast.error(error.message);
     },
   });
 };

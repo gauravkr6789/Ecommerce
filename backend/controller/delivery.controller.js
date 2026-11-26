@@ -1,6 +1,6 @@
 
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 
 import User from "../model/UserSchema.model.js";
 import Order from "../model/orderschema.model.js";

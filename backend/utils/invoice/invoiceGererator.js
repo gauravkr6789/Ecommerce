@@ -1,5 +1,5 @@
 import PDFDocument from "pdfkit";
-import Order from '../../model/orderschema.model'
+import Order from '../../model/orderschema.model.js'
 
 
 export const generateInvoicePDF = (order, stream) => {

@@ -5,7 +5,7 @@ export const getAllProducts = async (params = {}) => {
     params,
   });
 
-  return res.data.products;
+  return res.data
 };
 
 export const getProductById = async (id) => {
