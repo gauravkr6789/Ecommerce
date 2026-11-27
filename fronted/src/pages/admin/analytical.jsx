@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { BarChart3, TrendingUp, ShoppingBag, Users } from "lucide-react";
-import SalesChart from "../components/SalesChart";
-import { salesData } from "../data/mockData";
-
+import SalesChart from "../../components/admin/saleCharts";
+import { salesData } from "../../data/mockdata";
 const Analytics = () => {
   const [period, setPeriod] = useState("Yearly");
 

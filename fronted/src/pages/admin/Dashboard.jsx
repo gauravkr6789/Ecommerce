@@ -7,9 +7,9 @@ import {
   Activity,
 } from "lucide-react";
 
-import StatCard from "../components/StatCard";
-import SalesChart from "../components/SalesChart";
-import RecentOrders from "../components/RecentOrders";
+import StatCard from "../../components/admin/StatsCard";
+import SalesChart from "../../components/admin/saleCharts";
+import RecentOrders from "../../components/admin/RecentOrders";
 
 import { dashboardStats, mockActivities } from "../data/mockData";
 

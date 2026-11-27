@@ -7,8 +7,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-import { salesData } from "../data/mockData";
+import { salesData } from "../../data/mockdata";
 
 const SalesChart = () => {
   return (

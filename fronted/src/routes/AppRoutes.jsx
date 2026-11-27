@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import "../styles/globals.css";
 
-import MainLayout from "../layouts/MainLayout.jsx";
+import MainLayout from "../../src/layouts/MainLayout.jsx";
 
 // Public Pages
 import Home from "../pages/Home.jsx";
@@ -9,10 +9,10 @@ import Products from "../pages/Products.jsx";
 import ProductDetail from "../pages/ProductDetails.jsx";
 import Wishlist from "../pages/Wishlist.jsx";
 import Cart from "../pages/Cart.jsx";
-import NotFound from "../pages/NotFound.jsx";
+import NotFound from "../../src/pages/NotFound.jsx";
 
 // Admin Layout and Pages
-import AdminLayout from "../admin/layout/AdminLayout.jsx";
+import AdminLayout from '../../src/layouts/AdminLayout.jsx'
 import Dashboard from "../admin/pages/Dashboard.jsx";
 
 import {
