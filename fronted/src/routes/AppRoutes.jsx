@@ -3,8 +3,7 @@ import "../styles/globals.css";
 
 import MainLayout from "../layouts/MainLayout.jsx";
 
-// ================= Pages =================
-
+// Public Pages
 import Home from "../pages/Home.jsx";
 import Products from "../pages/Products.jsx";
 import ProductDetail from "../pages/ProductDetails.jsx";
@@ -12,101 +11,59 @@ import Wishlist from "../pages/Wishlist.jsx";
 import Cart from "../pages/Cart.jsx";
 import NotFound from "../pages/NotFound.jsx";
 
-// ================= Admin Pages =================
+// Admin Layout and Pages
+import AdminLayout from "../admin/layout/AdminLayout.jsx";
+import Dashboard from "../admin/pages/Dashboard.jsx";
 
-import Categories from "../pages/admin/Categories.jsx";
-import AdminDashboard from "../pages/admin/Dashboard.jsx";
+import {
+  Products as AdminProducts,
+  Orders,
+  Customers,
+  Coupons,
+  Payments,
+  Refunds,
+  Delivery,
+} from "../admin/pages/ManagementPages.jsx";
 
-import AdminProducts from "../pages/admin/Products.jsx"
-import CreateProduct from "../pages/admin/Create.jsx";
-import UpdateProduct from "../pages/admin/Edit.jsx"
+import Analytics from "../admin/pages/Analytics.jsx";
+import Settings from "../admin/pages/Settings.jsx";
 
-// ================= Auth =================
-
+// Auth
 import Login from "../pages/auth/Login.jsx";
 import Register from "../pages/auth/Register.jsx";
 import ForgotPassword from "../pages/auth/ForgotPassword.jsx";
 import ResetPassword from "../pages/auth/ResetPassword.jsx";
 import GoogleCallback from "../pages/auth/GoogleCallback.jsx";
 
-// ================= Routes =================
-
+// Route Protection
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminRoute from "./AdminRoute.jsx";
 
-// ================= Checkout / Payment =================
-
+// Checkout / Payment
 import Checkout from "../pages/Checkout.jsx";
 import PaymentSuccess from "../pages/PaymentSuccess.jsx";
 import PaymentFailed from "../pages/PaymentFailed.jsx";
 
-
 const AppRoutes = () => {
   return (
     <Routes>
+      {/* Public Auth Routes */}
 
-      {/* ================= Public Auth Routes ================= */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/auth/google/callback" element={<GoogleCallback />} />
 
-      <Route
-        path="/login"
-        element={<Login />}
-      />
-
-      <Route
-        path="/register"
-        element={<Register />}
-      />
-
-      <Route
-        path="/forgot-password"
-        element={<ForgotPassword />}
-      />
-
-      <Route
-        path="/reset-password/:token"
-        element={<ResetPassword />}
-      />
-
-      <Route
-        path="/auth/google/callback"
-        element={<GoogleCallback />}
-      />
-
-
-      {/* ================= Main Layout ================= */}
+      {/* Customer Layout */}
 
       <Route element={<MainLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
 
-        {/* ================= Public Pages ================= */}
+        <Route path="/categories" element={<Categories />} />
 
-        {/* Home */}
-        <Route
-          path="/"
-          element={<Home />}
-        />
-
-        {/* Products */}
-        <Route
-          path="/products"
-          element={<Products />}
-        />
-
-        {/* Single Product */}
-        <Route
-          path="/product/:id"
-          element={<ProductDetail />}
-        />
-
-        {/* Categories */}
-        <Route
-          path="/categories"
-          element={<Categories />}
-        />
-
-
-        {/* ================= Protected User Pages ================= */}
-
-        {/* Wishlist */}
         <Route
           path="/wishlist"
           element={
@@ -116,7 +73,6 @@ const AppRoutes = () => {
           }
         />
 
-        {/* Cart */}
         <Route
           path="/cart"
           element={
@@ -126,7 +82,6 @@ const AppRoutes = () => {
           }
         />
 
-        {/* Checkout */}
         <Route
           path="/checkout"
           element={
@@ -136,7 +91,6 @@ const AppRoutes = () => {
           }
         />
 
-        {/* Payment Success */}
         <Route
           path="/payment-success/:orderId"
           element={
@@ -146,7 +100,6 @@ const AppRoutes = () => {
           }
         />
 
-        {/* Payment Failed */}
         <Route
           path="/payment-failed/:orderId"
           element={
@@ -156,72 +109,47 @@ const AppRoutes = () => {
           }
         />
 
-
-        {/* Profile */}
         <Route
           path="/profile"
           element={
             <ProtectedRoute>
-              <h1 className="text-3xl font-bold">
-                Profile Page
-              </h1>
+              <h1 className="text-3xl font-bold">Profile Page</h1>
             </ProtectedRoute>
           }
         />
-
-
-        {/* ================= Admin ================= */}
-
-        {/* Admin Dashboard */}
-        <Route
-          path="/admin"
-          element={
-            <AdminRoute>
-              <AdminDashboard />
-            </AdminRoute>
-          }
-        />
-
-        {/* Admin Products */}
-        <Route
-          path="/admin/products"
-          element={
-            <AdminRoute>
-              <AdminProducts />
-            </AdminRoute>
-          }
-        />
-
-        {/* Create Product */}
-        <Route
-          path="/admin/products/create"
-          element={
-            <AdminRoute>
-              <CreateProduct />
-            </AdminRoute>
-          }
-        />
-
-        {/* Update Product */}
-        <Route
-          path="/admin/products/edit/:id"
-          element={
-            <AdminRoute>
-              <UpdateProduct />
-            </AdminRoute>
-          }
-        />
-
-
-        {/* ================= 404 ================= */}
-
-        <Route
-          path="*"
-          element={<NotFound />}
-        />
-
       </Route>
 
+      {/* Admin Layout */}
+
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <AdminLayout />
+          </AdminRoute>
+        }
+      >
+        <Route index element={<Dashboard />} />
+
+        <Route path="products" element={<AdminProducts />} />
+        <Route path="orders" element={<Orders />} />
+        <Route path="customers" element={<Customers />} />
+        <Route path="coupons" element={<Coupons />} />
+        <Route path="payments" element={<Payments />} />
+        <Route path="refunds" element={<Refunds />} />
+        <Route path="delivery" element={<Delivery />} />
+        <Route path="analytics" element={<Analytics />} />
+        <Route path="settings" element={<Settings />} />
+
+        {/* Existing Product CRUD */}
+
+        <Route path="products/create" element={<CreateProduct />} />
+        <Route path="products/edit/:id" element={<UpdateProduct />} />
+      </Route>
+
+      {/* 404 */}
+
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
